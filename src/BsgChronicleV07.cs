@@ -22,10 +22,10 @@ namespace BSGBestiary
                 ChronicleCatalog.Load();
                 ModEvents.GameUpdate.RegisterHandler(OnGameUpdate);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v011");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v012");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.11 inicializada. Cronica integrada con chat + historial + ticker.");
+                Log.Out("[BSG Chronicle] v0.12 inicializada. Cronica integrada + aviso nativo de PlayerTitles suprimido.");
             }
             catch (Exception ex)
             {
@@ -711,10 +711,15 @@ namespace BSGBestiary
                 Log.Error("[BSG Chronicle] No encontre PlayerTitles.NotifyPlayer para parchear.");
         }
 
-        [HarmonyPostfix]
-        private static void Postfix(MethodBase __originalMethod, object __instance, object[] __args)
+        [HarmonyPrefix]
+        private static bool Prefix(MethodBase __originalMethod, object __instance, object[] __args)
         {
+            // NotifyPlayer es la ruta que PlayerTitles usa para mostrar su banner inferior.
+            // El desbloqueo/estado ya fue decidido antes de llegar aquí. Copiamos los datos
+            // a nuestra Crónica y evitamos el banner duplicado (incluido el texto francés).
             PlayerTitlesBridge.OnNotify(__originalMethod, __instance, __args);
+            Log.Out("[BSG Chronicle] Aviso nativo de PlayerTitles suprimido; se usa CRONICA.");
+            return false;
         }
     }
 
