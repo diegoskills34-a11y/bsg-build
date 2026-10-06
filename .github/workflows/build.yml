@@ -38,10 +38,11 @@ jobs:
           if ($null -eq $asm) { throw "Assembly-CSharp.dll no encontrado después de 3 intentos de SteamCMD" }
           Write-Host "Assembly-CSharp: $($asm.FullName)"
 
-      - name: Download Harmony compiler reference
+      - name: Download compiler references
         shell: powershell
         run: |
           nuget install Lib.Harmony -Version 2.3.3 -OutputDirectory packages -NonInteractive
+          nuget install Microsoft.Net.Compilers.Toolset -Version 4.14.0 -OutputDirectory packages -NonInteractive
 
       - name: Compile DLL
         shell: powershell
