@@ -21,10 +21,10 @@ namespace BSGBestiary
             {
                 ChronicleCatalog.Load();
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v09");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v010");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.9 inicializada. La Cronica escucha directamente el desbloqueo de PlayerTitles.");
+                Log.Out("[BSG Chronicle] v0.10 inicializada. PlayerTitles hook + escritura directa del HUD.");
             }
             catch (Exception ex)
             {
@@ -160,23 +160,68 @@ namespace BSGBestiary
     {
         public static string Line = string.Empty;
         public static string Tooltip = string.Empty;
-        public static XUiC_BsgChronicleFeed Controller;
 
-        public static void Publish(string playerName, string title)
+        public static void Publish(EntityPlayerLocal localPlayer, string playerName, string title)
         {
             if (string.IsNullOrEmpty(title)) return;
             if (string.IsNullOrEmpty(playerName)) playerName = "Jugador";
 
-            Line = playerName + " consiguio " + title;
+            Line = playerName + " consiguió " + title;
             Tooltip = ChronicleCatalog.BuildTooltip(title);
 
             Log.Out("[BSG Chronicle] CRONICA => " + Line);
             Log.Out("[BSG Chronicle] Tooltip => " + Tooltip.Replace("\n", " | "));
 
-            if (Controller != null)
-                Controller.ApplyNow();
-            else
-                Log.Out("[BSG Chronicle] El desbloqueo llego antes de inicializar la ventana; se mostrara al inicializar.");
+            ApplyDirect(localPlayer);
+        }
+
+        private static void ApplyDirect(EntityPlayerLocal localPlayer)
+        {
+            try
+            {
+                if (localPlayer == null)
+                {
+                    Log.Error("[BSG Chronicle] No hay EntityPlayerLocal para escribir la Cronica.");
+                    return;
+                }
+
+                if (localPlayer.PlayerUI == null || localPlayer.PlayerUI.xui == null)
+                {
+                    Log.Error("[BSG Chronicle] PlayerUI/XUi todavía no está disponible.");
+                    return;
+                }
+
+                XUi xui = localPlayer.PlayerUI.xui;
+
+                XUiV_Window feedWindow = xui.GetWindow("bsgChronicleFeed");
+                if (feedWindow != null)
+                    feedWindow.IsVisible = true;
+
+                XUiController lineCtrl = xui.GetChildById("bsgChronicleLine0");
+                XUiV_Label lineLabel = lineCtrl == null ? null : lineCtrl.ViewComponent as XUiV_Label;
+
+                XUiController rowCtrl = xui.GetChildById("bsgChronicleRow0");
+
+                if (lineLabel == null)
+                {
+                    Log.Error("[BSG Chronicle] No encontré bsgChronicleLine0 en el XUi activo.");
+                    return;
+                }
+
+                lineLabel.Text = Line;
+                lineLabel.SetTextImmediately(Line);
+                lineLabel.ToolTip = Tooltip;
+
+                if (rowCtrl != null && rowCtrl.ViewComponent != null)
+                    rowCtrl.ViewComponent.ToolTip = Tooltip;
+
+                Log.Out("[BSG Chronicle] HUD escrito DIRECTAMENTE. texto='" + Line +
+                        "' tooltip='" + Tooltip.Replace("\n", " | ") + "'.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[BSG Chronicle] Error escribiendo la Cronica directamente en HUD: " + ex);
+            }
         }
     }
 
@@ -194,14 +239,18 @@ namespace BSGBestiary
                     return;
                 }
 
+                EntityPlayerLocal localPlayer = ExtractLocalPlayer(args);
+
                 string playerName = ExtractPlayerName(args);
+                if (string.IsNullOrEmpty(playerName) && localPlayer != null)
+                    playerName = localPlayer.EntityName;
                 if (string.IsNullOrEmpty(playerName))
                     playerName = ResolveLocalPlayerName();
 
                 Log.Out("[BSG Chronicle] PlayerTitles desbloqueo detectado: jugador='" +
                         playerName + "' titulo='" + title + "'. " + DescribeArgs(original, args));
 
-                ChronicleState.Publish(playerName, title);
+                ChronicleState.Publish(localPlayer, playerName, title);
             }
             catch (Exception ex)
             {
@@ -320,6 +369,19 @@ namespace BSGBestiary
             }
 
             return string.Empty;
+        }
+
+        private static EntityPlayerLocal ExtractLocalPlayer(object[] args)
+        {
+            if (args == null) return null;
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                EntityPlayerLocal local = args[i] as EntityPlayerLocal;
+                if (local != null) return local;
+            }
+
+            return null;
         }
 
         private static string ExtractPlayerName(object[] args)
@@ -529,71 +591,4 @@ namespace BSGBestiary
         }
     }
 
-    public class XUiC_BsgChronicleFeed : XUiController
-    {
-        private XUiV_Label lineLabel;
-        private XUiController lineController;
-        private XUiController rowController;
-
-        public override void Init()
-        {
-            base.Init();
-
-            ChronicleState.Controller = this;
-            lineController = GetChildById("bsgChronicleLine0");
-            rowController = GetChildById("bsgChronicleRow0");
-
-            if (lineController != null)
-                lineLabel = lineController.ViewComponent as XUiV_Label;
-
-            Log.Out("[BSG Chronicle] XUiC_BsgChronicleFeed.Init OK. label=" +
-                    (lineLabel == null ? "NO" : "SI") + " row=" + (rowController == null ? "NO" : "SI"));
-
-            ApplyNow();
-        }
-
-        public void ApplyNow()
-        {
-            try
-            {
-                if (lineLabel == null && lineController != null)
-                    lineLabel = lineController.ViewComponent as XUiV_Label;
-
-                if (lineLabel != null)
-                {
-                    lineLabel.Text = ChronicleState.Line;
-                    lineLabel.ToolTip = ChronicleState.Tooltip;
-                }
-
-                if (rowController != null && rowController.ViewComponent != null)
-                    rowController.ViewComponent.ToolTip = ChronicleState.Tooltip;
-
-                RefreshBindings();
-
-                Log.Out("[BSG Chronicle] UI aplicada. texto='" + ChronicleState.Line + "'.");
-            }
-            catch (Exception ex)
-            {
-                Log.Error("[BSG Chronicle] Error aplicando texto/tooltip al XUi: " + ex);
-            }
-        }
-
-        public override bool GetBindingValueInternal(ref string _value, string _bindingName)
-        {
-            switch (_bindingName)
-            {
-                case "bsgchronicle_visible":
-                    _value = "true";
-                    return true;
-                case "bsgchronicle_line0":
-                    _value = ChronicleState.Line;
-                    return true;
-                case "bsgchronicle_tip0":
-                    _value = ChronicleState.Tooltip;
-                    return true;
-                default:
-                    return base.GetBindingValueInternal(ref _value, _bindingName);
-            }
-        }
-    }
 }
