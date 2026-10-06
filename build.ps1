@@ -21,7 +21,6 @@ if (!(Test-Path $csc)) { throw "No se encontró Roslyn csc.exe" }
 $rsp = Join-Path $env:GITHUB_WORKSPACE "refs.rsp"
 $lines = @(
     '/nologo',
-    '/noconfig',
     '/target:library',
     '/optimize+',
     '/langversion:latest',
@@ -40,7 +39,7 @@ $lines | Set-Content -Path $rsp -Encoding UTF8
 
 New-Item -ItemType Directory -Force -Path (Join-Path $env:GITHUB_WORKSPACE 'out') | Out-Null
 Write-Host "Compiler: $csc"
-& $csc "@$rsp"
+& $csc /noconfig "@$rsp"
 if ($LASTEXITCODE -ne 0) { throw "csc devolvió $LASTEXITCODE" }
 
 Get-Item (Join-Path $env:GITHUB_WORKSPACE 'out\bsg_BestiaryChronicle.dll') | Format-List FullName,Length
