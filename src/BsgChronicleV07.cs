@@ -14,13 +14,36 @@ namespace BSGBestiary
             initialized = true;
             try
             {
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v07");
+                ModEvents.EntityKilled.RegisterHandler(OnEntityKilled);
+
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v08");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
-                Log.Out("[BSG Chronicle] v0.7 inicializada");
+
+                Log.Out("[BSG Chronicle] v0.8 inicializada. EntityKilled registrado.");
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Chronicle] Error inicializando: " + ex);
+                Log.Error("[BSG Chronicle] Error inicializando v0.8: " + ex);
+            }
+        }
+
+        private static void OnEntityKilled(ref ModEvents.SEntityKilledData data)
+        {
+            try
+            {
+                EntityPlayer player = data.KillingEntity as EntityPlayer;
+                EntityAlive victim = data.KilledEntitiy as EntityAlive;
+
+                if (player == null || victim == null) return;
+
+                Log.Out("[BSG Chronicle] EntityKilled: " + player.EntityName + " -> " + victim.EntityName);
+
+                if (!GameManager.IsDedicatedServer)
+                    ChronicleTestState.Announce(player);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[BSG Chronicle] Error en ModEvents.EntityKilled: " + ex);
             }
         }
     }
@@ -35,10 +58,12 @@ namespace BSGBestiary
         public static void Announce(EntityPlayer player)
         {
             if (Announced || player == null) return;
+
             Announced = true;
-            Line = player.EntityName + " consiguió [CRÓNICA BSG]";
-            Tooltip = "[CRÓNICA BSG]\nRequisito: eliminar 1 infectado (prueba v0.7)\nRecompensa: prueba visual de Crónica";
-            Log.Out("[BSG Chronicle] " + Line);
+            Line = player.EntityName + " consiguió [CRONISTA BSG]";
+            Tooltip = "[CRONISTA BSG]\nRequisito: eliminar 30 infectados\nRecompensa: prueba visual de Crónica";
+
+            Log.Out("[BSG Chronicle] Publicando feed: " + Line);
             Refresh();
         }
 
@@ -46,11 +71,14 @@ namespace BSGBestiary
         {
             try
             {
-                if (Controller != null) Controller.RefreshBindings();
+                if (Controller != null)
+                    Controller.RefreshBindings();
+                else
+                    Log.Out("[BSG Chronicle] Feed todavía sin controlador XUi.");
             }
             catch (Exception ex)
             {
-                Log.Out("[BSG Chronicle] Refresh omitido: " + ex.Message);
+                Log.Error("[BSG Chronicle] Error refrescando feed: " + ex);
             }
         }
     }
@@ -61,6 +89,7 @@ namespace BSGBestiary
         {
             base.Init();
             ChronicleTestState.Controller = this;
+            Log.Out("[BSG Chronicle] XUiC_BsgChronicleFeed.Init OK");
             RefreshBindings();
         }
 
@@ -83,23 +112,46 @@ namespace BSGBestiary
         }
     }
 
-    [HarmonyPatch(typeof(GameManager), "AwardKill", new Type[] { typeof(EntityAlive), typeof(EntityAlive) })]
-    public static class ChronicleAwardKillPatch
+    // Fallback: algunos flujos del juego pueden pasar por AwardKill.
+    // Si ModEvents.EntityKilled ya anunció, el bool Announced evita duplicados.
+    [HarmonyPatch]
+    public static class ChronicleAwardKillFallbackPatch
     {
+        private static System.Collections.Generic.IEnumerable<MethodBase> TargetMethods()
+        {
+            MethodInfo[] methods = typeof(GameManager).GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            for (int i = 0; i < methods.Length; i++)
+                if (methods[i].Name == "AwardKill")
+                    yield return methods[i];
+        }
+
         [HarmonyPostfix]
-        private static void Postfix(EntityAlive __0, EntityAlive __1)
+        private static void Postfix(object[] __args)
         {
             try
             {
-                if (ChronicleTestState.Announced || __0 == null || __1 == null) return;
-                EntityPlayer player = __0 as EntityPlayer;
-                if (player == null) return;
-                if (GameManager.IsDedicatedServer) return;
-                ChronicleTestState.Announce(player);
+                if (ChronicleTestState.Announced || __args == null) return;
+
+                EntityPlayer player = null;
+                for (int i = 0; i < __args.Length; i++)
+                {
+                    EntityPlayer p = __args[i] as EntityPlayer;
+                    if (p != null)
+                    {
+                        player = p;
+                        break;
+                    }
+                }
+
+                if (player != null && !GameManager.IsDedicatedServer)
+                {
+                    Log.Out("[BSG Chronicle] Fallback AwardKill activado.");
+                    ChronicleTestState.Announce(player);
+                }
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Chronicle] Error en AwardKill: " + ex);
+                Log.Error("[BSG Chronicle] Error en fallback AwardKill: " + ex);
             }
         }
     }
