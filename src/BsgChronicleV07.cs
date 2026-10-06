@@ -46,7 +46,7 @@ namespace BSGBestiary
         {
             try
             {
-                if (Controller != null) Controller.RefreshBindings(true);
+                if (Controller != null) Controller.RefreshBindings();
             }
             catch (Exception ex)
             {
@@ -61,7 +61,7 @@ namespace BSGBestiary
         {
             base.Init();
             ChronicleTestState.Controller = this;
-            RefreshBindings(true);
+            RefreshBindings();
         }
 
         public override bool GetBindingValueInternal(ref string _value, string _bindingName)
