@@ -21,6 +21,7 @@ if (!(Test-Path $csc)) { throw "No se encontró Roslyn csc.exe" }
 $rsp = Join-Path $env:GITHUB_WORKSPACE "refs.rsp"
 $lines = @(
     '/nologo',
+    '/noconfig',
     '/target:library',
     '/optimize+',
     '/langversion:latest',
