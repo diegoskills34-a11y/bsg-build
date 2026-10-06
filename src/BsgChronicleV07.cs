@@ -64,7 +64,7 @@ namespace BSGBestiary
             RefreshBindings(true);
         }
 
-        protected override bool GetBindingValueInternal(ref string _value, string _bindingName)
+        public override bool GetBindingValueInternal(ref string _value, string _bindingName)
         {
             switch (_bindingName)
             {
