@@ -283,11 +283,13 @@ namespace BSGBestiary
                 else if (age < TickerHoldSeconds + TickerFadeSeconds)
                 {
                     tickerWindow.IsVisible = true;
-                    tickerWindow.TargetAlpha = 0f;
+                    float alpha = (float)(1.0 - ((age - TickerHoldSeconds) / TickerFadeSeconds));
+                    if (alpha < 0f) alpha = 0f;
+                    tickerWindow.ForceVisible(alpha);
                 }
                 else
                 {
-                    tickerWindow.TargetAlpha = 0f;
+                    tickerWindow.ForceVisible(0f);
                     tickerWindow.IsVisible = false;
                 }
             }
