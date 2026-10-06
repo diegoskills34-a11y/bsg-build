@@ -13,14 +13,9 @@ $csc = "$env:WINDIR\Microsoft.NET\Framework64\v4.0.30319\csc.exe"
 if (!(Test-Path $csc)) { $csc = "$env:WINDIR\Microsoft.NET\Framework\v4.0.30319\csc.exe" }
 if (!(Test-Path $csc)) { throw "No se encontró csc.exe" }
 
-$exclude = @(
-    'mscorlib.dll','Accessibility.dll','Microsoft.CSharp.dll','netstandard.dll','System.dll','System.Core.dll',
-    'System.Xml.dll','System.Xml.Linq.dll','System.Data.dll','System.Drawing.dll','System.Configuration.dll',
-    'System.Numerics.dll','System.Runtime.Serialization.dll','System.Net.Http.dll','System.IO.Compression.dll',
-    'System.IO.Compression.FileSystem.dll','System.ValueTuple.dll'
-)
-
-$refs = Get-ChildItem $managed -Filter *.dll | Where-Object { $exclude -notcontains $_.Name }
+$refs = Get-ChildItem $managed -Filter *.dll | Where-Object {
+    $_.Name -notmatch '^(System\.|Microsoft\.|mscorlib|netstandard|Accessibility)'
+}
 $rsp = Join-Path $env:GITHUB_WORKSPACE "refs.rsp"
 $lines = @(
     '/nologo',
