@@ -26,10 +26,16 @@ jobs:
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "$env:GITHUB_WORKSPACE\server" | Out-Null
-          & .\steamcmd\steamcmd.exe +force_install_dir "$env:GITHUB_WORKSPACE\server" +login anonymous +app_update 294420 +quit
-          if ($LASTEXITCODE -ne 0) { throw "SteamCMD devolvió $LASTEXITCODE" }
-          $asm = Get-ChildItem "$env:GITHUB_WORKSPACE\server" -Recurse -Filter Assembly-CSharp.dll | Select-Object -First 1
-          if ($null -eq $asm) { throw "Assembly-CSharp.dll no encontrado después de descargar el dedicated server" }
+          $asm = $null
+          for ($i = 1; $i -le 3; $i++) {
+            Write-Host "SteamCMD intento $i..."
+            & .\steamcmd\steamcmd.exe +force_install_dir "$env:GITHUB_WORKSPACE\server" +login anonymous +app_update 294420 validate +quit
+            $asm = Get-ChildItem "$env:GITHUB_WORKSPACE\server" -Recurse -Filter Assembly-CSharp.dll -ErrorAction SilentlyContinue | Select-Object -First 1
+            if ($null -ne $asm) { break }
+            Start-Sleep -Seconds 3
+            $global:LASTEXITCODE = 0
+          }
+          if ($null -eq $asm) { throw "Assembly-CSharp.dll no encontrado después de 3 intentos de SteamCMD" }
           Write-Host "Assembly-CSharp: $($asm.FullName)"
 
       - name: Download Harmony compiler reference
