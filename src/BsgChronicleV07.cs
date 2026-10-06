@@ -22,10 +22,10 @@ namespace BSGBestiary
                 ChronicleCatalog.Load();
                 ModEvents.GameUpdate.RegisterHandler(OnGameUpdate);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v012");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v013");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.12 inicializada. Cronica integrada + aviso nativo de PlayerTitles suprimido.");
+                Log.Out("[BSG Chronicle] v0.13 inicializada. UI corregida + recompensa de daño persistente TEST.");
             }
             catch (Exception ex)
             {
@@ -46,6 +46,7 @@ namespace BSGBestiary
         public string CategoryName = string.Empty;
         public string KillEntity = string.Empty;
         public int Threshold;
+        public float RewardDamagePct;
     }
 
     public static class ChronicleCatalog
@@ -90,6 +91,9 @@ namespace BSGBestiary
                         info.CategoryName = categoryName;
                         info.KillEntity = killEntity;
                         info.Threshold = threshold;
+                        float rewardDamagePct;
+                        float.TryParse(Attr(tier, "reward_damage_pct"), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out rewardDamagePct);
+                        info.RewardDamagePct = rewardDamagePct;
                         ByText[text] = info;
                     }
                 }
@@ -145,9 +149,13 @@ namespace BSGBestiary
                 requirement = "Alcanzar " + info.Threshold + " bajas";
             }
 
+            string reward = info.RewardDamagePct > 0f
+                ? "+" + info.RewardDamagePct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "% daño contra infectados"
+                : "título " + StripBrackets(info.Text);
+
             return info.Text +
                    "\nRequisito: " + requirement +
-                   "\nRecompensa: titulo " + StripBrackets(info.Text);
+                   "\nRecompensa: " + reward;
         }
 
         private static string StripBrackets(string s)
@@ -241,26 +249,26 @@ namespace BSGBestiary
 
                 XUiV_Window tickerWindow = xui.GetWindow("bsgChronicleTicker");
                 XUiV_Window historyWindow = xui.GetWindow("bsgChronicleHistory");
+                XUiController tickerRoot = xui.GetChildById("bsgChronicleTickerRoot");
+                XUiController historyRoot = xui.GetChildById("bsgChronicleHistoryRoot");
 
                 if (chatOpen)
                 {
-                    if (tickerWindow != null)
-                    {
-                        tickerWindow.IsVisible = false;
-                    }
+                    if (tickerRoot != null && tickerRoot.ViewComponent != null)
+                        tickerRoot.ViewComponent.IsVisible = false;
+
+                    if (historyRoot != null && historyRoot.ViewComponent != null)
+                        historyRoot.ViewComponent.IsVisible = true;
 
                     if (historyWindow != null)
-                    {
-                        historyWindow.IsVisible = true;
                         historyWindow.ForceVisible(1f);
-                    }
 
                     FillHistory(xui);
                     return;
                 }
 
-                if (historyWindow != null)
-                    historyWindow.IsVisible = false;
+                if (historyRoot != null && historyRoot.ViewComponent != null)
+                    historyRoot.ViewComponent.IsVisible = false;
 
                 ChronicleEntry latest = Entries[0];
                 double age = (DateTime.UtcNow - latest.CreatedUtc).TotalSeconds;
@@ -273,13 +281,15 @@ namespace BSGBestiary
 
                 if (forceTicker || age < TickerHoldSeconds)
                 {
-                    tickerWindow.IsVisible = true;
+                    if (tickerRoot != null && tickerRoot.ViewComponent != null)
+                        tickerRoot.ViewComponent.IsVisible = true;
                     tickerWindow.ForceVisible(1f);
                     FillTicker(xui, latest);
                 }
                 else if (age < TickerHoldSeconds + TickerFadeSeconds)
                 {
-                    tickerWindow.IsVisible = true;
+                    if (tickerRoot != null && tickerRoot.ViewComponent != null)
+                        tickerRoot.ViewComponent.IsVisible = true;
                     float alpha = (float)(1.0 - ((age - TickerHoldSeconds) / TickerFadeSeconds));
                     if (alpha < 0f) alpha = 0f;
                     tickerWindow.ForceVisible(alpha);
@@ -287,7 +297,8 @@ namespace BSGBestiary
                 else
                 {
                     tickerWindow.ForceVisible(0f);
-                    tickerWindow.IsVisible = false;
+                    if (tickerRoot != null && tickerRoot.ViewComponent != null)
+                        tickerRoot.ViewComponent.IsVisible = false;
                 }
             }
             catch (Exception ex)
@@ -352,6 +363,155 @@ namespace BSGBestiary
         }
     }
 
+
+    public static class MasteryState
+    {
+        private static readonly Dictionary<string, HashSet<string>> Unlocked =
+            new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+        private static string LoadedPath = string.Empty;
+
+        private static string GetPath()
+        {
+            string dir = GameIO.GetSaveGameDir();
+            if (string.IsNullOrEmpty(dir)) return string.Empty;
+            return Path.Combine(dir, "bsg_bestiary_state.xml");
+        }
+
+        private static void EnsureLoaded()
+        {
+            string path = GetPath();
+            if (string.IsNullOrEmpty(path) || string.Equals(path, LoadedPath, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            Unlocked.Clear();
+            LoadedPath = path;
+
+            if (!File.Exists(path)) return;
+
+            try
+            {
+                XDocument doc = XDocument.Load(path);
+                XElement root = doc.Root;
+                if (root == null) return;
+
+                foreach (XElement p in root.Elements("player"))
+                {
+                    string name = (string)p.Attribute("name") ?? string.Empty;
+                    if (string.IsNullOrEmpty(name)) continue;
+
+                    HashSet<string> set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (XElement t in p.Elements("title"))
+                    {
+                        string id = (string)t.Attribute("id") ?? string.Empty;
+                        if (!string.IsNullOrEmpty(id)) set.Add(id);
+                    }
+                    Unlocked[name] = set;
+                }
+
+                Log.Out("[BSG Bestiario] Estado persistente cargado: " + path);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[BSG Bestiario] No pude cargar estado: " + ex);
+            }
+        }
+
+        public static void Unlock(string playerName, string title)
+        {
+            if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(title)) return;
+            EnsureLoaded();
+
+            HashSet<string> set;
+            if (!Unlocked.TryGetValue(playerName, out set))
+            {
+                set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                Unlocked[playerName] = set;
+            }
+
+            if (!set.Add(title)) return;
+            Save();
+            Log.Out("[BSG Bestiario] Maestría persistida: " + playerName + " => " + title);
+        }
+
+        public static float GetZombieDamageBonus(string playerName)
+        {
+            if (string.IsNullOrEmpty(playerName)) return 0f;
+            EnsureLoaded();
+
+            HashSet<string> set;
+            if (!Unlocked.TryGetValue(playerName, out set)) return 0f;
+
+            float totalPct = 0f;
+            foreach (string title in set)
+            {
+                ChronicleTitleInfo info = ChronicleCatalog.Find(title);
+                if (info == null || info.RewardDamagePct <= 0f) continue;
+                if (string.Equals(info.KillEntity, "zombie", StringComparison.OrdinalIgnoreCase))
+                    totalPct += info.RewardDamagePct;
+            }
+            return totalPct;
+        }
+
+        private static void Save()
+        {
+            string path = GetPath();
+            if (string.IsNullOrEmpty(path)) return;
+
+            try
+            {
+                XElement root = new XElement("bsgBestiary");
+                foreach (KeyValuePair<string, HashSet<string>> pair in Unlocked)
+                {
+                    XElement p = new XElement("player", new XAttribute("name", pair.Key));
+                    foreach (string title in pair.Value)
+                        p.Add(new XElement("title", new XAttribute("id", title)));
+                    root.Add(p);
+                }
+                new XDocument(root).Save(path);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[BSG Bestiario] No pude guardar estado: " + ex);
+            }
+        }
+    }
+
+    [HarmonyPatch]
+    public static class BestiaryDamagePatch
+    {
+        private static MethodBase TargetMethod()
+        {
+            return AccessTools.Method(typeof(EntityAlive), "DamageEntity",
+                new Type[] { typeof(DamageSource), typeof(int), typeof(bool), typeof(float) });
+        }
+
+        [HarmonyPrefix]
+        private static void Prefix(EntityAlive __instance, DamageSource _damageSource, ref int _strength)
+        {
+            try
+            {
+                if (__instance == null || _damageSource == null || _strength <= 0) return;
+                if (__instance.entityType != EntityType.Zombie) return;
+
+                EntityPlayer player = __instance.world.GetEntity(_damageSource.getEntityId()) as EntityPlayer;
+                if (player == null) return;
+
+                float bonusPct = MasteryState.GetZombieDamageBonus(player.EntityName);
+                if (bonusPct <= 0f) return;
+
+                int original = _strength;
+                _strength = (int)Math.Ceiling(_strength * (1f + bonusPct / 100f));
+
+                Log.Out("[BSG Bestiario] Bonus daño infectados " + bonusPct.ToString("0.#") +
+                        "%: " + original + " -> " + _strength + " (" + player.EntityName + ")");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[BSG Bestiario] Error aplicando bonus de daño: " + ex);
+            }
+        }
+    }
+
     public static class PlayerTitlesBridge
     {
         public static void OnNotify(MethodBase original, object instance, object[] args)
@@ -377,6 +537,7 @@ namespace BSGBestiary
                 Log.Out("[BSG Chronicle] PlayerTitles desbloqueo detectado: jugador='" +
                         playerName + "' titulo='" + title + "'. " + DescribeArgs(original, args));
 
+                MasteryState.Unlock(playerName, title);
                 ChronicleState.Publish(localPlayer, playerName, title);
             }
             catch (Exception ex)
