@@ -26,7 +26,7 @@ jobs:
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "$env:GITHUB_WORKSPACE\server" | Out-Null
-          & .\steamcmd\steamcmd.exe +login anonymous +force_install_dir "$env:GITHUB_WORKSPACE\server" +app_update 294420 +quit
+          & .\steamcmd\steamcmd.exe +force_install_dir "$env:GITHUB_WORKSPACE\server" +login anonymous +app_update 294420 +quit
           if ($LASTEXITCODE -ne 0) { throw "SteamCMD devolvió $LASTEXITCODE" }
           $asm = Get-ChildItem "$env:GITHUB_WORKSPACE\server" -Recurse -Filter Assembly-CSharp.dll | Select-Object -First 1
           if ($null -eq $asm) { throw "Assembly-CSharp.dll no encontrado después de descargar el dedicated server" }
