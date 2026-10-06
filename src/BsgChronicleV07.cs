@@ -246,14 +246,12 @@ namespace BSGBestiary
                 {
                     if (tickerWindow != null)
                     {
-                        tickerWindow.TargetAlpha = 0f;
                         tickerWindow.IsVisible = false;
                     }
 
                     if (historyWindow != null)
                     {
                         historyWindow.IsVisible = true;
-                        historyWindow.TargetAlpha = 1f;
                         historyWindow.ForceVisible(1f);
                     }
 
@@ -276,7 +274,6 @@ namespace BSGBestiary
                 if (forceTicker || age < TickerHoldSeconds)
                 {
                     tickerWindow.IsVisible = true;
-                    tickerWindow.TargetAlpha = 1f;
                     tickerWindow.ForceVisible(1f);
                     FillTicker(xui, latest);
                 }
