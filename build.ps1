@@ -26,7 +26,7 @@ $lines = @(
     '/nologo',
     '/target:library',
     '/optimize+',
-    '/langversion:latest',
+    '/langversion:5',
     '/out:out\bsg_BestiaryChronicle.dll',
     '/reference:System.Xml.Linq.dll',
     ('/reference:"' + $harmony + '"')
