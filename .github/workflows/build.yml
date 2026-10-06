@@ -1,0 +1,41 @@
+name: Build BSG Chronicle DLL
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download SteamCMD
+        shell: powershell
+        run: |
+          Invoke-WebRequest https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip -OutFile steamcmd.zip
+          Expand-Archive steamcmd.zip -DestinationPath steamcmd -Force
+
+      - name: Download 7 Days to Die dedicated server references
+        shell: powershell
+        run: |
+          & .\steamcmd\steamcmd.exe +force_install_dir "$env:GITHUB_WORKSPACE\server" +login anonymous +app_update 294420 validate +quit
+          if (!(Test-Path "$env:GITHUB_WORKSPACE\server\7DaysToDieServer_Data\Managed\Assembly-CSharp.dll")) { throw "Assembly-CSharp.dll no encontrado" }
+
+      - name: Download Harmony compiler reference
+        shell: powershell
+        run: |
+          nuget install Lib.Harmony -Version 2.3.3 -OutputDirectory packages -NonInteractive
+
+      - name: Compile DLL
+        shell: powershell
+        run: .\build.ps1
+
+      - name: Upload DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: bsg-BestiaryChronicle-v0.7
+          path: out/bsg_BestiaryChronicle.dll
+          if-no-files-found: error
