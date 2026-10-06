@@ -12,19 +12,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download SteamCMD
+      - name: Download and self-update SteamCMD
         shell: powershell
         run: |
           Invoke-WebRequest https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip -OutFile steamcmd.zip
           Expand-Archive steamcmd.zip -DestinationPath steamcmd -Force
-          # Primera ejecución: deja que SteamCMD se actualice y relance limpio.
           & .\steamcmd\steamcmd.exe +quit
+          # SteamCMD puede devolver 1 cuando termina de auto-actualizarse.
+          $global:LASTEXITCODE = 0
+          exit 0
 
       - name: Download 7 Days to Die dedicated server references
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "$env:GITHUB_WORKSPACE\server" | Out-Null
-          & .\steamcmd\steamcmd.exe +force_install_dir "$env:GITHUB_WORKSPACE\server" +login anonymous +app_update 294420 validate +quit
+          & .\steamcmd\steamcmd.exe +login anonymous +force_install_dir "$env:GITHUB_WORKSPACE\server" +app_update 294420 +quit
           if ($LASTEXITCODE -ne 0) { throw "SteamCMD devolvió $LASTEXITCODE" }
           $asm = Get-ChildItem "$env:GITHUB_WORKSPACE\server" -Recurse -Filter Assembly-CSharp.dll | Select-Object -First 1
           if ($null -eq $asm) { throw "Assembly-CSharp.dll no encontrado después de descargar el dedicated server" }
