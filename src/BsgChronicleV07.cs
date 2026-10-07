@@ -21,11 +21,12 @@ namespace BSGBestiary
             {
                 ChronicleCatalog.Load();
                 ModEvents.GameUpdate.RegisterHandler(OnGameUpdate);
+                ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v015");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v016");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.15 inicializada. Recompensas migradas a buffs.xml / EffectManager.");
+                Log.Out("[BSG Chronicle] v0.16 inicializada. Maestria por tiers + reward inmediato al spawn.");
             }
             catch (Exception ex)
             {
@@ -38,6 +39,19 @@ namespace BSGBestiary
             ChronicleState.Tick();
             BestiaryRewardBuff.EnsureLocalPlayerReward();
         }
+
+        private static void OnPlayerSpawnedInWorld(ref ModEvents.SPlayerSpawnedInWorldData data)
+        {
+            try
+            {
+                if (!data.IsLocalPlayer) return;
+                BestiaryRewardBuff.ApplyCurrentRewards(GameManager.Instance.World.GetPrimaryPlayer());
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[BSG Bestiario] Error aplicando reward al spawn: " + ex);
+            }
+        }
     }
 
     public sealed class ChronicleTitleInfo
@@ -48,6 +62,8 @@ namespace BSGBestiary
         public string KillEntity = string.Empty;
         public int Threshold;
         public float RewardDamagePct;
+        public float RewardDismemberPct;
+        public string RewardBuff = string.Empty;
     }
 
     public static class ChronicleCatalog
@@ -95,6 +111,12 @@ namespace BSGBestiary
                         float rewardDamagePct;
                         float.TryParse(Attr(tier, "reward_damage_pct"), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out rewardDamagePct);
                         info.RewardDamagePct = rewardDamagePct;
+
+                        float rewardDismemberPct;
+                        float.TryParse(Attr(tier, "reward_dismember_pct"), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out rewardDismemberPct);
+                        info.RewardDismemberPct = rewardDismemberPct;
+                        info.RewardBuff = Attr(tier, "reward_buff");
+
                         ByText[text] = info;
                     }
                 }
@@ -150,9 +172,20 @@ namespace BSGBestiary
                 requirement = "Alcanzar " + info.Threshold + " bajas";
             }
 
-            string reward = info.RewardDamagePct > 0f
-                ? "+" + info.RewardDamagePct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "% daño contra infectados"
-                : "título " + StripBrackets(info.Text);
+            string reward;
+            if (info.RewardDamagePct > 0f || info.RewardDismemberPct > 0f)
+            {
+                List<string> parts = new List<string>();
+                if (info.RewardDamagePct > 0f)
+                    parts.Add("+" + info.RewardDamagePct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "% daño contra infectados");
+                if (info.RewardDismemberPct > 0f)
+                    parts.Add("+" + info.RewardDismemberPct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "% desmembramiento");
+                reward = string.Join(" / ", parts.ToArray());
+            }
+            else
+            {
+                reward = "título " + StripBrackets(info.Text);
+            }
 
             return info.Text +
                    "\nRequisito: " + requirement +
@@ -453,6 +486,29 @@ namespace BSGBestiary
             return totalPct;
         }
 
+        public static ChronicleTitleInfo GetBestZombieMasteryInfo(string playerName)
+        {
+            if (string.IsNullOrEmpty(playerName)) return null;
+            EnsureLoaded();
+
+            HashSet<string> set;
+            if (!Unlocked.TryGetValue(playerName, out set)) return null;
+
+            ChronicleTitleInfo best = null;
+            foreach (string title in set)
+            {
+                ChronicleTitleInfo info = ChronicleCatalog.Find(title);
+                if (info == null) continue;
+                if (!string.Equals(info.KillEntity, "zombie", StringComparison.OrdinalIgnoreCase)) continue;
+                if (string.IsNullOrEmpty(info.RewardBuff)) continue;
+
+                if (best == null || info.Threshold > best.Threshold)
+                    best = info;
+            }
+
+            return best;
+        }
+
         public static bool HasTitle(string playerName, string title)
         {
             if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(title)) return false;
@@ -489,24 +545,23 @@ namespace BSGBestiary
 
     public static class BestiaryRewardBuff
     {
-        public const string TestTitle = "[CRONISTA BSG]";
-        public const string TestBuff = "buffBSGInfectedMasteryTest100";
+        private const string LegacyTestBuff = "buffBSGInfectedMasteryTest100";
+
+        private static readonly string[] ZombieMasteryBuffs = new string[]
+        {
+            "buffBSGInfectedMastery01",
+            "buffBSGInfectedMastery02",
+            "buffBSGInfectedMastery03",
+            "buffBSGInfectedMastery04",
+            "buffBSGInfectedMastery05"
+        };
+
         private static DateTime NextCheckUtc = DateTime.MinValue;
-        private static bool LoggedApplied;
+        private static string LastApplied = string.Empty;
 
         public static void ApplyForUnlock(EntityPlayer player, string title)
         {
-            try
-            {
-                if (player == null || !string.Equals(title, TestTitle, StringComparison.OrdinalIgnoreCase))
-                    return;
-
-                Apply(player);
-            }
-            catch (Exception ex)
-            {
-                Log.Error("[BSG Bestiario] Error aplicando buff al desbloquear: " + ex);
-            }
+            ApplyCurrentRewards(player);
         }
 
         public static void EnsureLocalPlayerReward()
@@ -514,14 +569,10 @@ namespace BSGBestiary
             try
             {
                 if (DateTime.UtcNow < NextCheckUtc) return;
-                NextCheckUtc = DateTime.UtcNow.AddSeconds(1);
+                NextCheckUtc = DateTime.UtcNow.AddMilliseconds(250);
 
                 if (GameManager.Instance == null || GameManager.Instance.World == null) return;
-                EntityPlayer player = GameManager.Instance.World.GetPrimaryPlayer();
-                if (player == null) return;
-
-                if (!MasteryState.HasTitle(player.EntityName, TestTitle)) return;
-                Apply(player);
+                ApplyCurrentRewards(GameManager.Instance.World.GetPrimaryPlayer());
             }
             catch (Exception ex)
             {
@@ -529,22 +580,57 @@ namespace BSGBestiary
             }
         }
 
-        private static void Apply(EntityPlayer player)
+        public static void ApplyCurrentRewards(EntityPlayer player)
         {
-            if (player == null || player.Buffs == null) return;
+            try
+            {
+                if (player == null || player.Buffs == null) return;
 
-            if (!player.Buffs.HasBuff(TestBuff))
-            {
-                player.Buffs.AddBuff(TestBuff);
-                Log.Out("[BSG Bestiario] BUFF RECOMPENSA APLICADO: " + player.EntityName +
-                        " => " + TestBuff);
-                LoggedApplied = true;
+                // Limpieza explícita del buff +100% usado en v0.15.
+                if (player.Buffs.HasBuff(LegacyTestBuff))
+                {
+                    player.Buffs.RemoveBuff(LegacyTestBuff);
+                    Log.Out("[BSG Bestiario] Buff de prueba v0.15 eliminado.");
+                }
+
+                ChronicleTitleInfo best = MasteryState.GetBestZombieMasteryInfo(player.EntityName);
+                string targetBuff = best == null ? string.Empty : best.RewardBuff;
+
+                for (int i = 0; i < ZombieMasteryBuffs.Length; i++)
+                {
+                    string buff = ZombieMasteryBuffs[i];
+                    if (string.Equals(buff, targetBuff, StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    if (player.Buffs.HasBuff(buff))
+                        player.Buffs.RemoveBuff(buff);
+                }
+
+                if (string.IsNullOrEmpty(targetBuff))
+                {
+                    if (LastApplied != "<none>")
+                    {
+                        Log.Out("[BSG Bestiario] Sin maestría de infectados aplicable para " + player.EntityName + ".");
+                        LastApplied = "<none>";
+                    }
+                    return;
+                }
+
+                if (!player.Buffs.HasBuff(targetBuff))
+                    player.Buffs.AddBuff(targetBuff);
+
+                if (!string.Equals(LastApplied, targetBuff, StringComparison.OrdinalIgnoreCase))
+                {
+                    Log.Out("[BSG Bestiario] MAESTRIA ACTIVA INMEDIATA: " + player.EntityName +
+                            " => " + targetBuff +
+                            " | daño=" + best.RewardDamagePct.ToString("0.#") + "%" +
+                            " | desmembramiento=" + best.RewardDismemberPct.ToString("0.#") + "%");
+                    LastApplied = targetBuff;
+                }
             }
-            else if (!LoggedApplied)
+            catch (Exception ex)
             {
-                Log.Out("[BSG Bestiario] BUFF RECOMPENSA YA ACTIVO: " + player.EntityName +
-                        " => " + TestBuff);
-                LoggedApplied = true;
+                Log.Error("[BSG Bestiario] Error aplicando rewards actuales: " + ex);
             }
         }
     }
