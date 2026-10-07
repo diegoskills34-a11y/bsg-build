@@ -23,10 +23,10 @@ namespace BSGBestiary
                 ModEvents.GameUpdate.RegisterHandler(OnGameUpdate);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v016");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v017");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.16 inicializada. Maestria por tiers + reward inmediato al spawn.");
+                Log.Out("[BSG Chronicle] v0.17 inicializada. Motor generico de recompensas por categoria.");
             }
             catch (Exception ex)
             {
@@ -201,6 +201,17 @@ namespace BSGBestiary
         public static IEnumerable<string> KnownTitles()
         {
             return ByText.Keys;
+        }
+
+        public static IEnumerable<string> KnownRewardBuffs()
+        {
+            HashSet<string> seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (ChronicleTitleInfo info in ByText.Values)
+            {
+                if (info == null || string.IsNullOrEmpty(info.RewardBuff)) continue;
+                if (seen.Add(info.RewardBuff))
+                    yield return info.RewardBuff;
+            }
         }
     }
 
@@ -486,27 +497,35 @@ namespace BSGBestiary
             return totalPct;
         }
 
-        public static ChronicleTitleInfo GetBestZombieMasteryInfo(string playerName)
+        public static List<ChronicleTitleInfo> GetBestRewardInfos(string playerName)
         {
-            if (string.IsNullOrEmpty(playerName)) return null;
+            List<ChronicleTitleInfo> result = new List<ChronicleTitleInfo>();
+            if (string.IsNullOrEmpty(playerName)) return result;
             EnsureLoaded();
 
             HashSet<string> set;
-            if (!Unlocked.TryGetValue(playerName, out set)) return null;
+            if (!Unlocked.TryGetValue(playerName, out set)) return result;
 
-            ChronicleTitleInfo best = null;
+            Dictionary<string, ChronicleTitleInfo> bestByCategory =
+                new Dictionary<string, ChronicleTitleInfo>(StringComparer.OrdinalIgnoreCase);
+
             foreach (string title in set)
             {
                 ChronicleTitleInfo info = ChronicleCatalog.Find(title);
-                if (info == null) continue;
-                if (!string.Equals(info.KillEntity, "zombie", StringComparison.OrdinalIgnoreCase)) continue;
-                if (string.IsNullOrEmpty(info.RewardBuff)) continue;
+                if (info == null || string.IsNullOrEmpty(info.RewardBuff)) continue;
 
-                if (best == null || info.Threshold > best.Threshold)
-                    best = info;
+                string key = string.IsNullOrEmpty(info.CategoryId) ? info.KillEntity : info.CategoryId;
+                if (string.IsNullOrEmpty(key)) key = info.Text;
+
+                ChronicleTitleInfo current;
+                if (!bestByCategory.TryGetValue(key, out current) || info.Threshold > current.Threshold)
+                    bestByCategory[key] = info;
             }
 
-            return best;
+            foreach (ChronicleTitleInfo info in bestByCategory.Values)
+                result.Add(info);
+
+            return result;
         }
 
         public static bool HasTitle(string playerName, string title)
@@ -546,18 +565,8 @@ namespace BSGBestiary
     public static class BestiaryRewardBuff
     {
         private const string LegacyTestBuff = "buffBSGInfectedMasteryTest100";
-
-        private static readonly string[] ZombieMasteryBuffs = new string[]
-        {
-            "buffBSGInfectedMastery01",
-            "buffBSGInfectedMastery02",
-            "buffBSGInfectedMastery03",
-            "buffBSGInfectedMastery04",
-            "buffBSGInfectedMastery05"
-        };
-
         private static DateTime NextCheckUtc = DateTime.MinValue;
-        private static string LastApplied = string.Empty;
+        private static string LastSignature = string.Empty;
 
         public static void ApplyForUnlock(EntityPlayer player, string title)
         {
@@ -576,7 +585,7 @@ namespace BSGBestiary
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Bestiario] Error restaurando reward buff: " + ex);
+                Log.Error("[BSG Bestiario] Error restaurando rewards: " + ex);
             }
         }
 
@@ -586,46 +595,64 @@ namespace BSGBestiary
             {
                 if (player == null || player.Buffs == null) return;
 
-                // Limpieza explícita del buff +100% usado en v0.15.
                 if (player.Buffs.HasBuff(LegacyTestBuff))
-                {
                     player.Buffs.RemoveBuff(LegacyTestBuff);
-                    Log.Out("[BSG Bestiario] Buff de prueba v0.15 eliminado.");
+
+                List<ChronicleTitleInfo> selected = MasteryState.GetBestRewardInfos(player.EntityName);
+                HashSet<string> selectedBuffs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                for (int i = 0; i < selected.Count; i++)
+                {
+                    ChronicleTitleInfo info = selected[i];
+                    if (info == null || string.IsNullOrEmpty(info.RewardBuff)) continue;
+                    selectedBuffs.Add(info.RewardBuff);
                 }
 
-                ChronicleTitleInfo best = MasteryState.GetBestZombieMasteryInfo(player.EntityName);
-                string targetBuff = best == null ? string.Empty : best.RewardBuff;
-
-                for (int i = 0; i < ZombieMasteryBuffs.Length; i++)
+                foreach (string buff in ChronicleCatalog.KnownRewardBuffs())
                 {
-                    string buff = ZombieMasteryBuffs[i];
-                    if (string.Equals(buff, targetBuff, StringComparison.OrdinalIgnoreCase))
-                        continue;
-
+                    if (selectedBuffs.Contains(buff)) continue;
                     if (player.Buffs.HasBuff(buff))
                         player.Buffs.RemoveBuff(buff);
                 }
 
-                if (string.IsNullOrEmpty(targetBuff))
+                for (int i = 0; i < selected.Count; i++)
                 {
-                    if (LastApplied != "<none>")
-                    {
-                        Log.Out("[BSG Bestiario] Sin maestría de infectados aplicable para " + player.EntityName + ".");
-                        LastApplied = "<none>";
-                    }
-                    return;
+                    ChronicleTitleInfo info = selected[i];
+                    if (info == null || string.IsNullOrEmpty(info.RewardBuff)) continue;
+                    if (!player.Buffs.HasBuff(info.RewardBuff))
+                        player.Buffs.AddBuff(info.RewardBuff);
                 }
 
-                if (!player.Buffs.HasBuff(targetBuff))
-                    player.Buffs.AddBuff(targetBuff);
-
-                if (!string.Equals(LastApplied, targetBuff, StringComparison.OrdinalIgnoreCase))
+                List<string> sigParts = new List<string>();
+                for (int i = 0; i < selected.Count; i++)
                 {
-                    Log.Out("[BSG Bestiario] MAESTRIA ACTIVA INMEDIATA: " + player.EntityName +
-                            " => " + targetBuff +
-                            " | daño=" + best.RewardDamagePct.ToString("0.#") + "%" +
-                            " | desmembramiento=" + best.RewardDismemberPct.ToString("0.#") + "%");
-                    LastApplied = targetBuff;
+                    ChronicleTitleInfo info = selected[i];
+                    if (info == null || string.IsNullOrEmpty(info.RewardBuff)) continue;
+                    sigParts.Add(info.CategoryId + "=" + info.RewardBuff);
+                }
+                sigParts.Sort(StringComparer.OrdinalIgnoreCase);
+                string signature = string.Join("|", sigParts.ToArray());
+
+                if (!string.Equals(signature, LastSignature, StringComparison.Ordinal))
+                {
+                    if (selected.Count == 0)
+                    {
+                        Log.Out("[BSG Bestiario] Sin recompensas de maestría activas para " + player.EntityName + ".");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < selected.Count; i++)
+                        {
+                            ChronicleTitleInfo info = selected[i];
+                            if (info == null || string.IsNullOrEmpty(info.RewardBuff)) continue;
+                            Log.Out("[BSG Bestiario] MAESTRIA ACTIVA: " + player.EntityName +
+                                    " | categoria=" + info.CategoryId +
+                                    " | buff=" + info.RewardBuff +
+                                    " | daño=" + info.RewardDamagePct.ToString("0.#") + "%" +
+                                    " | desmembramiento=" + info.RewardDismemberPct.ToString("0.#") + "%");
+                        }
+                    }
+                    LastSignature = signature;
                 }
             }
             catch (Exception ex)
