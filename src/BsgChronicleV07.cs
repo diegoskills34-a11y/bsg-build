@@ -22,10 +22,10 @@ namespace BSGBestiary
                 ChronicleCatalog.Load();
                 ModEvents.GameUpdate.RegisterHandler(OnGameUpdate);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v014");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v015");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.14 inicializada. Recompensa de daño aplicada en NetPackageDamageEntity.");
+                Log.Out("[BSG Chronicle] v0.15 inicializada. Recompensas migradas a buffs.xml / EffectManager.");
             }
             catch (Exception ex)
             {
@@ -36,6 +36,7 @@ namespace BSGBestiary
         private static void OnGameUpdate(ref ModEvents.SGameUpdateData data)
         {
             ChronicleState.Tick();
+            BestiaryRewardBuff.EnsureLocalPlayerReward();
         }
     }
 
@@ -452,6 +453,16 @@ namespace BSGBestiary
             return totalPct;
         }
 
+        public static bool HasTitle(string playerName, string title)
+        {
+            if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(title)) return false;
+            EnsureLoaded();
+
+            HashSet<string> set;
+            if (!Unlocked.TryGetValue(playerName, out set)) return false;
+            return set.Contains(title);
+        }
+
         private static void Save()
         {
             string path = GetPath();
@@ -476,88 +487,64 @@ namespace BSGBestiary
         }
     }
 
-    [HarmonyPatch]
-    public static class BestiaryNetworkDamagePatch
+    public static class BestiaryRewardBuff
     {
-        private static readonly BindingFlags F =
-            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+        public const string TestTitle = "[CRONISTA BSG]";
+        public const string TestBuff = "buffBSGInfectedMasteryTest100";
+        private static DateTime NextCheckUtc = DateTime.MinValue;
+        private static bool LoggedApplied;
 
-        private static FieldInfo StrengthField;
-        private static FieldInfo AttackerIdField;
-        private static FieldInfo VictimIdField;
-        private static bool Resolved;
-
-        private static MethodBase TargetMethod()
-        {
-            MethodInfo m = AccessTools.Method(typeof(NetPackageDamageEntity), "ProcessPackage");
-            if (m == null)
-                Log.Error("[BSG Bestiario] No encontré NetPackageDamageEntity.ProcessPackage.");
-            else
-                Log.Out("[BSG Bestiario] Hook recompensa => NetPackageDamageEntity.ProcessPackage");
-            return m;
-        }
-
-        private static void ResolveFields(Type t)
-        {
-            StrengthField = FirstField(t, "strength", "Strength", "damage", "Damage", "_strength");
-            AttackerIdField = FirstField(t, "attackerEntityId", "AttackerEntityId", "attackerId");
-            VictimIdField = FirstField(t, "entityId", "EntityId", "targetEntityId", "victimEntityId", "VictimEntityId");
-            Resolved = true;
-
-            Log.Out("[BSG Bestiario] NetPackageDamageEntity fields => strength=" +
-                    (StrengthField == null ? "<MISSING>" : StrengthField.Name) +
-                    ", attacker=" + (AttackerIdField == null ? "<MISSING>" : AttackerIdField.Name) +
-                    ", victim=" + (VictimIdField == null ? "<MISSING>" : VictimIdField.Name));
-        }
-
-        private static FieldInfo FirstField(Type t, params string[] names)
-        {
-            for (int i = 0; i < names.Length; i++)
-            {
-                FieldInfo f = t.GetField(names[i], F);
-                if (f != null) return f;
-            }
-            return null;
-        }
-
-        [HarmonyPrefix]
-        private static void Prefix(object __instance, World _world)
+        public static void ApplyForUnlock(EntityPlayer player, string title)
         {
             try
             {
-                if (__instance == null || _world == null) return;
-                if (!Resolved) ResolveFields(__instance.GetType());
-
-                if (StrengthField == null || AttackerIdField == null || VictimIdField == null)
+                if (player == null || !string.Equals(title, TestTitle, StringComparison.OrdinalIgnoreCase))
                     return;
 
-                int attackerId = Convert.ToInt32(AttackerIdField.GetValue(__instance));
-                int victimId = Convert.ToInt32(VictimIdField.GetValue(__instance));
-                if (attackerId < 0 || victimId < 0 || attackerId == victimId) return;
-
-                EntityPlayer player = _world.GetEntity(attackerId) as EntityPlayer;
-                if (player == null) return;
-
-                EntityAlive victim = _world.GetEntity(victimId) as EntityAlive;
-                if (victim == null || victim.entityType != EntityType.Zombie) return;
-
-                float bonusPct = MasteryState.GetZombieDamageBonus(player.EntityName);
-                if (bonusPct <= 0f) return;
-
-                int raw = Convert.ToInt32(StrengthField.GetValue(__instance));
-                if (raw <= 0) return;
-
-                int scaled = (int)Math.Ceiling(raw * (1f + bonusPct / 100f));
-                object boxed = Convert.ChangeType(scaled, StrengthField.FieldType);
-                StrengthField.SetValue(__instance, boxed);
-
-                Log.Out("[BSG Bestiario] RECOMPENSA APLICADA (paquete): " + player.EntityName +
-                        " -> " + victim.EntityName + " | " + raw + " -> " + scaled +
-                        " | bonus=" + bonusPct.ToString("0.#") + "%");
+                Apply(player);
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Bestiario] Error aplicando bonus en NetPackageDamageEntity: " + ex);
+                Log.Error("[BSG Bestiario] Error aplicando buff al desbloquear: " + ex);
+            }
+        }
+
+        public static void EnsureLocalPlayerReward()
+        {
+            try
+            {
+                if (DateTime.UtcNow < NextCheckUtc) return;
+                NextCheckUtc = DateTime.UtcNow.AddSeconds(1);
+
+                if (GameManager.Instance == null || GameManager.Instance.World == null) return;
+                EntityPlayer player = GameManager.Instance.World.GetPrimaryPlayer();
+                if (player == null) return;
+
+                if (!MasteryState.HasTitle(player.EntityName, TestTitle)) return;
+                Apply(player);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[BSG Bestiario] Error restaurando reward buff: " + ex);
+            }
+        }
+
+        private static void Apply(EntityPlayer player)
+        {
+            if (player == null || player.Buffs == null) return;
+
+            if (!player.Buffs.HasBuff(TestBuff))
+            {
+                player.Buffs.AddBuff(TestBuff);
+                Log.Out("[BSG Bestiario] BUFF RECOMPENSA APLICADO: " + player.EntityName +
+                        " => " + TestBuff);
+                LoggedApplied = true;
+            }
+            else if (!LoggedApplied)
+            {
+                Log.Out("[BSG Bestiario] BUFF RECOMPENSA YA ACTIVO: " + player.EntityName +
+                        " => " + TestBuff);
+                LoggedApplied = true;
             }
         }
     }
@@ -588,6 +575,7 @@ namespace BSGBestiary
                         playerName + "' titulo='" + title + "'. " + DescribeArgs(original, args));
 
                 MasteryState.Unlock(playerName, title);
+                BestiaryRewardBuff.ApplyForUnlock(localPlayer, title);
                 ChronicleState.Publish(localPlayer, playerName, title);
             }
             catch (Exception ex)
