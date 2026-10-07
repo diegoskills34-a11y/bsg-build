@@ -22,10 +22,10 @@ namespace BSGBestiary
                 ChronicleCatalog.Load();
                 ModEvents.GameUpdate.RegisterHandler(OnGameUpdate);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v013");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v014");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.13 inicializada. UI corregida + recompensa de daño persistente TEST.");
+                Log.Out("[BSG Chronicle] v0.14 inicializada. Recompensa de daño aplicada en NetPackageDamageEntity.");
             }
             catch (Exception ex)
             {
@@ -477,37 +477,87 @@ namespace BSGBestiary
     }
 
     [HarmonyPatch]
-    public static class BestiaryDamagePatch
+    public static class BestiaryNetworkDamagePatch
     {
+        private static readonly BindingFlags F =
+            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+
+        private static FieldInfo StrengthField;
+        private static FieldInfo AttackerIdField;
+        private static FieldInfo VictimIdField;
+        private static bool Resolved;
+
         private static MethodBase TargetMethod()
         {
-            return AccessTools.Method(typeof(EntityAlive), "DamageEntity",
-                new Type[] { typeof(DamageSource), typeof(int), typeof(bool), typeof(float) });
+            MethodInfo m = AccessTools.Method(typeof(NetPackageDamageEntity), "ProcessPackage");
+            if (m == null)
+                Log.Error("[BSG Bestiario] No encontré NetPackageDamageEntity.ProcessPackage.");
+            else
+                Log.Out("[BSG Bestiario] Hook recompensa => NetPackageDamageEntity.ProcessPackage");
+            return m;
+        }
+
+        private static void ResolveFields(Type t)
+        {
+            StrengthField = FirstField(t, "strength", "Strength", "damage", "Damage", "_strength");
+            AttackerIdField = FirstField(t, "attackerEntityId", "AttackerEntityId", "attackerId");
+            VictimIdField = FirstField(t, "entityId", "EntityId", "targetEntityId", "victimEntityId", "VictimEntityId");
+            Resolved = true;
+
+            Log.Out("[BSG Bestiario] NetPackageDamageEntity fields => strength=" +
+                    (StrengthField == null ? "<MISSING>" : StrengthField.Name) +
+                    ", attacker=" + (AttackerIdField == null ? "<MISSING>" : AttackerIdField.Name) +
+                    ", victim=" + (VictimIdField == null ? "<MISSING>" : VictimIdField.Name));
+        }
+
+        private static FieldInfo FirstField(Type t, params string[] names)
+        {
+            for (int i = 0; i < names.Length; i++)
+            {
+                FieldInfo f = t.GetField(names[i], F);
+                if (f != null) return f;
+            }
+            return null;
         }
 
         [HarmonyPrefix]
-        private static void Prefix(EntityAlive __instance, DamageSource _damageSource, ref int _strength)
+        private static void Prefix(object __instance, World _world)
         {
             try
             {
-                if (__instance == null || _damageSource == null || _strength <= 0) return;
-                if (__instance.entityType != EntityType.Zombie) return;
+                if (__instance == null || _world == null) return;
+                if (!Resolved) ResolveFields(__instance.GetType());
 
-                EntityPlayer player = __instance.world.GetEntity(_damageSource.getEntityId()) as EntityPlayer;
+                if (StrengthField == null || AttackerIdField == null || VictimIdField == null)
+                    return;
+
+                int attackerId = Convert.ToInt32(AttackerIdField.GetValue(__instance));
+                int victimId = Convert.ToInt32(VictimIdField.GetValue(__instance));
+                if (attackerId < 0 || victimId < 0 || attackerId == victimId) return;
+
+                EntityPlayer player = _world.GetEntity(attackerId) as EntityPlayer;
                 if (player == null) return;
+
+                EntityAlive victim = _world.GetEntity(victimId) as EntityAlive;
+                if (victim == null || victim.entityType != EntityType.Zombie) return;
 
                 float bonusPct = MasteryState.GetZombieDamageBonus(player.EntityName);
                 if (bonusPct <= 0f) return;
 
-                int original = _strength;
-                _strength = (int)Math.Ceiling(_strength * (1f + bonusPct / 100f));
+                int raw = Convert.ToInt32(StrengthField.GetValue(__instance));
+                if (raw <= 0) return;
 
-                Log.Out("[BSG Bestiario] Bonus daño infectados " + bonusPct.ToString("0.#") +
-                        "%: " + original + " -> " + _strength + " (" + player.EntityName + ")");
+                int scaled = (int)Math.Ceiling(raw * (1f + bonusPct / 100f));
+                object boxed = Convert.ChangeType(scaled, StrengthField.FieldType);
+                StrengthField.SetValue(__instance, boxed);
+
+                Log.Out("[BSG Bestiario] RECOMPENSA APLICADA (paquete): " + player.EntityName +
+                        " -> " + victim.EntityName + " | " + raw + " -> " + scaled +
+                        " | bonus=" + bonusPct.ToString("0.#") + "%");
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Bestiario] Error aplicando bonus de daño: " + ex);
+                Log.Error("[BSG Bestiario] Error aplicando bonus en NetPackageDamageEntity: " + ex);
             }
         }
     }
