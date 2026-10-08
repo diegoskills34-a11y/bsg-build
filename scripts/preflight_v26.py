@@ -48,9 +48,9 @@ def validate_button(root):
     if not append_nodes:
         return
     node = append_nodes[0]
-    expected = "/windows/window[@name='CharacterFrameWindow']/panel[@name='header']"
-    test("CharacterFrameWindow header XPath", node.get("xpath") == expected)
-    buttons = node.findall("simplebutton")
+    expected = "/windows/window[@name='CharacterFrameWindow']"
+    test("CharacterFrameWindow 2.6 root XPath", node.get("xpath") == expected)
+    buttons = node.findall("button")
     test("one Bestiary button", len(buttons) == 1 and
          buttons[0].get("name") == "bsgBestiaryButton")
     if buttons:
@@ -58,9 +58,10 @@ def validate_button(root):
         try:
             posx = int(btn.get("pos", "0,0").split(",")[0])
             width = int(btn.get("width", "0"))
-            test("button fits vanilla 327px character header",
-                 0 <= posx and posx + width <= 327,
-                 "right edge=" + str(posx + width))
+            # Títulos usa pos=-38,width=34; B tiene que quedar a su izquierda.
+            test("Bestiary B is adjacent to existing Titles T", 
+                 posx == -76 and width == 34 and posx + width <= -38,
+                 "BSG B: " + str(posx) + ".." + str(posx + width))
         except (ValueError, IndexError):
             test("button geometry numeric", False)
 
