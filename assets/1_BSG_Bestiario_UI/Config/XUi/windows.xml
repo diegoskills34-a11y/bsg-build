@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+  <!-- Vanilla / Rebirth 2.6: XUi. Se agrega sin modificar el boton de Titulos existente. -->
+  <append xpath="/windows/window[@name='CharacterFrameWindow']/panel[@name='header']">
+    <simplebutton name="bsgBestiaryButton" depth="15" pos="276,-7" width="45" height="29"
+                  caption="BSG" font_size="19" tooltip="Abrir Bestiario BSG"/>
+  </append>
+</configs>
