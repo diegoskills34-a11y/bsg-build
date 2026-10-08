@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+  <!-- Se carga DESPUES de 0_BSG_Bestiario, sin reemplazar su parche de Titulos ni Cronica -->
+  <append xpath="/windows/window[@name='CharacterFrameWindow']/panel[@name='header']">
+    <simplebutton depth="15" name="bsgBestiaryButton" caption="BESTIARIO" width="105" height="30" pos="278,-6" tooltip="Abrir Bestiario BSG" />
+  </append>
+</configs>
