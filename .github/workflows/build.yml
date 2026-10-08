@@ -56,24 +56,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "package/0_BSG_Bestiario" | Out-Null
           Copy-Item "out/bsg_BestiaryChronicle.dll" "package/0_BSG_Bestiario/bsg_BestiaryChronicle.dll" -Force
-          @'
-BSG BESTIARIO - Paquete integrado v0.20 / v0.21 / v0.22 / v0.23
-Instalacion: extraer este paquete sobre Mods, sobrescribiendo la DLL.
-REQUISITO: mantener el mod existente 0_BSG_Bestiario, con PlayerTitles.dll y sus XML.
-No sobrescribe Config/playertitles.xml, buffs.xml, XUi ni thresholds.
-
-F8 abre/cierra la nueva interfaz Bestiario dentro del juego.
-Seleccionar una familia con el mouse. AvPag/RePag cambia de familia.
-La lista de criaturas solo muestra tipos descubiertos luego de instalar esta version.
-Las bajas mostradas son las registradas desde v0.21; NO incluyen las historicas.
-Los titulos y sus requisitos siguen siendo gestionados por PlayerTitles.
-El registro adicional se guarda en bsg_bestiary_kills.xml en el directorio del mundo.
-El estado anterior de maestrias se mantiene en bsg_bestiary_state.xml.
-Para diagnostico, buscar [BSG Bestiario] AUDITORIA en el log.
-
-LIMITE ACTUAL: los tests sobre el juego real y dedicado todavia no se realizaron;
-la sincronizacion multiplayer de esos contadores queda para v0.24.
-'@ | Set-Content -Encoding UTF8 -Path "package/0_BSG_Bestiario/BSG_LEEME_v0.23.txt"
+          "BSG v0.20-0.23 | F8 abre el Bestiario | Actualizacion solo DLL | Mantener PlayerTitles y XML de v0.19 | Bajas registradas desde v0.21, no historicas | No se altera el umbral de titulos | Estado extra: bsg_bestiary_kills.xml | Testing in-game pendiente" | Set-Content -Path "package/0_BSG_Bestiario/BSG_LEEME_v0.23.txt" -Encoding UTF8
           Compress-Archive -Path "package/0_BSG_Bestiario" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.20-0.23_ACTUALIZACION.zip" -Force
 
       - name: Upload BSG update ZIP
