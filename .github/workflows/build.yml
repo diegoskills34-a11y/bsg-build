@@ -51,20 +51,29 @@ jobs:
         shell: powershell
         run: .\build.ps1
 
-      - name: Package BSG v0.20-0.23 update
+      - name: Package BSG v0.24 XML and UI hotfix
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "package/0_BSG_Bestiario" | Out-Null
           Copy-Item "out/bsg_BestiaryChronicle.dll" "package/0_BSG_Bestiario/bsg_BestiaryChronicle.dll" -Force
-          "BSG v0.20-0.23 | F8 abre el Bestiario | Actualizacion solo DLL | Mantener PlayerTitles y XML de v0.19 | Bajas registradas desde v0.21, no historicas | No se altera el umbral de titulos | Estado extra: bsg_bestiary_kills.xml | Testing in-game pendiente" | Set-Content -Path "package/0_BSG_Bestiario/BSG_LEEME_v0.23.txt" -Encoding UTF8
-          Compress-Archive -Path "package/0_BSG_Bestiario" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.20-0.23_ACTUALIZACION.zip" -Force
+          Copy-Item "assets/1_BSG_Bestiario_UI" -Destination "package/1_BSG_Bestiario_UI" -Recurse -Force
+          @(
+            "BSG v0.24: correcciones de playertitles.xml, buffs y boton BESTIARIO sin F8.",
+            "Extraer sobre la carpeta Mods. Mantener 0_BSG_Bestiario de v0.23 con PlayerTitles.dll, Config y XUi originales.",
+            "Nueva carpeta 1_BSG_Bestiario_UI agrega un boton al encabezado del personaje sin reemplazar Titulos.",
+            "Al inicio se corrige el patron XML '<tier ... / reward_damage_pct=...>' y se respalda como .bsg_antes_de_reparar.bak.",
+            "Se conservan thresholds y titulos personales. No borra progreso.",
+            "Verificar en el log: XML de titulos reparado, Catalogo cargado y Boton de Bestiario conectado.",
+            "SI NO APARECE EL BOTON: compartir output_log y captura de la pantalla de personaje."
+          ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.24.txt" -Encoding UTF8
+          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.24_ARREGLO.zip" -Force
 
       - name: Upload BSG update ZIP
         id: upload_package
         uses: actions/upload-artifact@v4
         with:
-          name: BSG_Bestiario_Rebirth26_v0.20-0.23_ACTUALIZACION
-          path: out/BSG_Bestiario_Rebirth26_v0.20-0.23_ACTUALIZACION.zip
+          name: BSG_Bestiario_Rebirth26_v0.24_ARREGLO
+          path: out/BSG_Bestiario_Rebirth26_v0.24_ARREGLO.zip
           if-no-files-found: error
 
       - name: Publish build pointer
@@ -76,7 +85,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "build-output" | Out-Null
           [pscustomobject]@{
-            version = "0.23"
+            version = "0.24"
             workflow_run_id = [long]$env:BSG_RUN_ID
             artifact_id = [long]$env:BSG_ARTIFACT_ID
             commit = $env:BSG_SOURCE_SHA
