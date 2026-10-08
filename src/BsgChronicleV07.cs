@@ -499,16 +499,18 @@ namespace BSGBestiary
 
                 if (chatOpen)
                 {
+                    if (tickerWindow != null) tickerWindow.ForceVisible(0f);
                     if (tickerRoot != null && tickerRoot.ViewComponent != null)
                         tickerRoot.ViewComponent.IsVisible = false;
 
+                    // No mostrar un gran recuadro vacio al abrir el chat.
+                    bool hasHistory = Entries.Count > 0;
                     if (historyRoot != null && historyRoot.ViewComponent != null)
-                        historyRoot.ViewComponent.IsVisible = true;
-
+                        historyRoot.ViewComponent.IsVisible = hasHistory;
                     if (historyWindow != null)
-                        historyWindow.ForceVisible(1f);
-
-                    FillHistory(xui);
+                        historyWindow.ForceVisible(hasHistory ? 1f : 0f);
+                    if (hasHistory)
+                        FillHistory(xui);
                     return;
                 }
 
@@ -1024,9 +1026,12 @@ namespace BSGBestiary
         }
 
         [HarmonyPostfix]
-        private static void Postfix(MethodBase __originalMethod)
+        private static void Postfix(MethodBase __originalMethod, object __instance)
         {
-            if (__originalMethod != null)
+            // Si OnClose es heredado de XUiController, este patch puede recibir
+            // otros controladores. Ignorarlos para no dejar Chat abierto erroneamente.
+            if (__originalMethod != null && __instance != null &&
+                string.Equals(__instance.GetType().Name, "XUiC_Chat", StringComparison.Ordinal))
                 ChatUiState.Changed(__originalMethod.Name == "OnOpen");
         }
     }
