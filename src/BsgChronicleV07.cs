@@ -23,10 +23,10 @@ namespace BSGBestiary
                 ModEvents.GameUpdate.RegisterHandler(OnGameUpdate);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v017");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v018");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.17 inicializada. Motor generico de recompensas por categoria.");
+                Log.Out("[BSG Chronicle] v0.18 inicializada. Recompensas del bestiario por 15 familias.");
             }
             catch (Exception ex)
             {
@@ -176,10 +176,16 @@ namespace BSGBestiary
             if (info.RewardDamagePct > 0f || info.RewardDismemberPct > 0f)
             {
                 List<string> parts = new List<string>();
+                string targetName = string.IsNullOrEmpty(info.CategoryName)
+                    ? "objetivos"
+                    : info.CategoryName.ToLowerInvariant();
+
                 if (info.RewardDamagePct > 0f)
-                    parts.Add("+" + info.RewardDamagePct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "% daño contra infectados");
+                    parts.Add("+" + info.RewardDamagePct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) +
+                              "% daño contra " + targetName);
                 if (info.RewardDismemberPct > 0f)
-                    parts.Add("+" + info.RewardDismemberPct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "% desmembramiento");
+                    parts.Add("+" + info.RewardDismemberPct.ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) +
+                              "% desmembramiento contra " + targetName);
                 reward = string.Join(" / ", parts.ToArray());
             }
             else
