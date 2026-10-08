@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using HarmonyLib;
 
@@ -24,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v02023");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v024fix");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.20-0.23 inicializada. Auditoria, registro de bajas y explorador F8.");
+                Log.Out("[BSG Chronicle] v0.24 fix inicializada. Bestiario por boton, autoprogramacion XML y rewards compatibles.");
             }
             catch (Exception ex)
             {
@@ -40,6 +41,7 @@ namespace BSGBestiary
             ChronicleState.Tick();
             BestiaryRewardBuff.EnsureLocalPlayerReward();
             BestiaryTracker.Tick();
+            BestiaryButtonBridge.Tick();
         }
 
         private static void OnPlayerSpawnedInWorld(ref ModEvents.SPlayerSpawnedInWorldData data)
@@ -88,6 +90,7 @@ namespace BSGBestiary
                     return;
                 }
 
+                RepairBadTitleTags(path);
                 XDocument doc = XDocument.Load(path);
                 XElement root = doc.Root;
                 if (root == null) return;
@@ -131,6 +134,26 @@ namespace BSGBestiary
             {
                 Log.Error("[BSG Chronicle] Error leyendo playertitles.xml: " + ex);
             }
+        }
+
+
+        // Corrige únicamente el patrón roto introducido por las pruebas:
+        // <tier ... / reward_damage_pct="100"> => <tier ... reward_damage_pct="100" />
+        // Se ejecuta antes de que PlayerTitles inicialice y lea el mismo XML.
+        private static void RepairBadTitleTags(string path)
+        {
+            string raw = File.ReadAllText(path);
+            string repaired = Regex.Replace(raw,
+                @"(<tier\b[^>\r\n]*?)\s*/\s*((?:(?:reward_damage_pct|reward_dismember_pct|reward_buff)\s*=\s*""[^""]*""\s*)+)>",
+                "$1 $2 />",
+                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            if (string.Equals(raw, repaired, StringComparison.Ordinal)) return;
+            // Validar antes de escribir; mantener los thresholds y el resto intactos.
+            XDocument.Parse(repaired);
+            string backup = path + ".bsg_antes_de_reparar.bak";
+            if (!File.Exists(backup)) File.Copy(path, backup);
+            File.WriteAllText(path, repaired);
+            Log.Out("[BSG Bestiario] XML de titulos reparado automaticamente. Respaldo: " + backup);
         }
 
         private static string Attr(XElement e, string name)
@@ -763,6 +786,9 @@ namespace BSGBestiary
         private const string LegacyTestBuff = "buffBSGInfectedMasteryTest100";
         private static DateTime NextCheckUtc = DateTime.MinValue;
         private static string LastSignature = string.Empty;
+        private static DateTime NextErrorLogUtc = DateTime.MinValue;
+        private static bool warnedMissingBuffMethod;
+
 
         public static void ApplyForUnlock(EntityPlayer player, string title)
         {
@@ -792,7 +818,7 @@ namespace BSGBestiary
                 if (player == null || player.Buffs == null) return;
 
                 if (player.Buffs.HasBuff(LegacyTestBuff))
-                    player.Buffs.RemoveBuff(LegacyTestBuff);
+                    BuffMethodCompatibility.Invoke(player.Buffs, "RemoveBuff", LegacyTestBuff);
 
                 List<ChronicleTitleInfo> selected = MasteryState.GetBestRewardInfos(player.EntityName);
                 HashSet<string> selectedBuffs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -808,7 +834,7 @@ namespace BSGBestiary
                 {
                     if (selectedBuffs.Contains(buff)) continue;
                     if (player.Buffs.HasBuff(buff))
-                        player.Buffs.RemoveBuff(buff);
+                        BuffMethodCompatibility.Invoke(player.Buffs, "RemoveBuff", buff);
                 }
 
                 for (int i = 0; i < selected.Count; i++)
@@ -816,7 +842,7 @@ namespace BSGBestiary
                     ChronicleTitleInfo info = selected[i];
                     if (info == null || string.IsNullOrEmpty(info.RewardBuff)) continue;
                     if (!player.Buffs.HasBuff(info.RewardBuff))
-                        player.Buffs.AddBuff(info.RewardBuff);
+                        BuffMethodCompatibility.Invoke(player.Buffs, "AddBuff", info.RewardBuff);
                 }
 
                 List<string> sigParts = new List<string>();
@@ -853,8 +879,120 @@ namespace BSGBestiary
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Bestiario] Error aplicando rewards actuales: " + ex);
+                if (DateTime.UtcNow >= NextErrorLogUtc)
+                {
+                    NextErrorLogUtc = DateTime.UtcNow.AddSeconds(30);
+                    Log.Error("[BSG Bestiario] Error aplicando rewards actuales: " + ex);
+                }
             }
+        }
+    }
+
+
+    // Rebirth 2.6 puede cambiar la firma de AddBuff / RemoveBuff con respecto
+    // al runtime de referencia usado por GitHub Actions. Resolverla al ejecutar.
+    public static class BuffMethodCompatibility
+    {
+        private static readonly Dictionary<string, MethodInfo> Cache =
+            new Dictionary<string, MethodInfo>(StringComparer.OrdinalIgnoreCase);
+        private static readonly HashSet<string> Warnings =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        public static bool Invoke(object buffs, string methodName, string buffName)
+        {
+            if (buffs == null || string.IsNullOrEmpty(buffName)) return false;
+            try
+            {
+                Type type = buffs.GetType();
+                string key = type.FullName + "." + methodName;
+                MethodInfo method;
+                if (!Cache.TryGetValue(key, out method))
+                {
+                    ParameterInfo[] best = null;
+                    MethodInfo selected = null;
+                    foreach (MethodInfo candidate in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+                    {
+                        if (!string.Equals(candidate.Name, methodName, StringComparison.Ordinal)) continue;
+                        ParameterInfo[] ps = candidate.GetParameters();
+                        if (ps.Length < 1 || ps[0].ParameterType != typeof(string)) continue;
+                        if (selected == null || ps.Length < best.Length)
+                        {
+                            selected = candidate;
+                            best = ps;
+                        }
+                    }
+                    method = selected;
+                    Cache[key] = method;
+                }
+
+                if (method == null)
+                {
+                    if (Warnings.Add(key))
+                        Log.Out("[BSG Bestiario] Buff: no existe firma compatible para " + key);
+                    return false;
+                }
+
+                ParameterInfo[] parameters = method.GetParameters();
+                object[] args = new object[parameters.Length];
+                args[0] = buffName;
+                for (int i = 1; i < args.Length; i++)
+                {
+                    ParameterInfo p = parameters[i];
+                    if (p.HasDefaultValue && p.DefaultValue != DBNull.Value)
+                        args[i] = p.DefaultValue;
+                    else if (p.ParameterType.IsValueType)
+                        args[i] = Activator.CreateInstance(p.ParameterType);
+                    else
+                        args[i] = null;
+                }
+                method.Invoke(buffs, args);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                string warning = methodName + ":" + buffName + ":" + ex.GetType().Name;
+                if (Warnings.Add(warning))
+                    Log.Error("[BSG Bestiario] Fallo de firma de buff (una vez): " + warning + " " + ex.Message);
+                return false;
+            }
+        }
+    }
+
+    public static class BestiaryButtonBridge
+    {
+        private static XUiController current;
+        private static DateTime nextCheckUtc = DateTime.MinValue;
+
+        public static void Tick()
+        {
+            try
+            {
+                if (DateTime.UtcNow < nextCheckUtc) return;
+                nextCheckUtc = DateTime.UtcNow.AddMilliseconds(750);
+                if (GameManager.Instance == null || GameManager.Instance.World == null) return;
+                EntityPlayerLocal local = GameManager.Instance.World.GetPrimaryPlayer() as EntityPlayerLocal;
+                if (local == null || local.PlayerUI == null || local.PlayerUI.xui == null) return;
+                XUiController button = local.PlayerUI.xui.GetChildById("bsgBestiaryButton");
+                if (ReferenceEquals(current, button)) return;
+                if (current != null) current.OnPress -= HandlePress;
+                current = button;
+                if (current != null)
+                {
+                    current.OnPress += HandlePress;
+                    Log.Out("[BSG Bestiario] Boton de Bestiario conectado al panel Personaje.");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (DateTime.UtcNow > nextCheckUtc.AddSeconds(10))
+                    Log.Error("[BSG Bestiario] Error buscando boton: " + ex.Message);
+            }
+        }
+
+        private static void HandlePress(XUiController sender, int mouseButton)
+        {
+            if (mouseButton == 0)
+                BestiaryOverlay.Toggle();
         }
     }
 
