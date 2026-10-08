@@ -37,6 +37,8 @@ namespace BSGBestiary
         private static bool Dirty;
         private static DateTime NextSaveUtc = DateTime.MinValue;
         private static int LoggedUnclassified;
+        private static int LoggedKills;
+        private static int SuppressedDuplicateKills;
 
         private static string StatePath()
         {
@@ -143,12 +145,26 @@ namespace BSGBestiary
                 List<BestiaryFamilyDefinition> definitions = BestiaryFamilyDefinition.Read();
                 if (definitions.Count == 0) return;
 
-                int id = victim.GetHashCode();
+                // Entity.entityId es el identificador de la victima dentro del mundo.
+                // GetHashCode() depende de la instancia CLR y no sirve para dedupe.
+                int id = victim.entityId;
+                if (id <= 0)
+                {
+                    Log.Out("[BSG Bestiario] Aviso: victima sin entityId valido: " + entityClass);
+                    return;
+                }
                 DateTime now = DateTime.UtcNow;
                 lock (Gate)
                 {
                     DateTime seen;
-                    if (RecentVictims.TryGetValue(id, out seen) && (now - seen).TotalSeconds < 60d) return;
+                    if (RecentVictims.TryGetValue(id, out seen) && (now - seen).TotalSeconds < 60d)
+                    {
+                        SuppressedDuplicateKills++;
+                        if (SuppressedDuplicateKills <= 5 || SuppressedDuplicateKills % 100 == 0)
+                            Log.Out("[BSG Bestiario] DIAG: baja duplicada ignorada entityId=" + id +
+                                    " (acumulado=" + SuppressedDuplicateKills + ")");
+                        return;
+                    }
                     RecentVictims[id] = now;
                     if (RecentVictims.Count > 2000)
                     {
@@ -190,8 +206,19 @@ namespace BSGBestiary
                         }
                         if (creature.Kills < int.MaxValue) creature.Kills++;
                     }
-                    if (matched == 0 && LoggedUnclassified++ < 10)
-                        Log.Out("[BSG Bestiario] SIN FAMILIA: " + entityClass);
+                    if (matched == 0 && LoggedUnclassified++ < 15)
+                        Log.Out("[BSG Bestiario] SIN FAMILIA: " + entityClass +
+                                " | entityId=" + id + " | jugador=" + killer.EntityName);
+                    if (matched > 0)
+                    {
+                        LoggedKills++;
+                        if (LoggedKills <= 12 || LoggedKills % 100 == 0)
+                            Log.Out("[BSG Bestiario] DIAG: muerte aceptada entityId=" + id +
+                                    " | clase=" + entityClass +
+                                    " | jugador=" + killer.EntityName +
+                                    " | familias coincidentes=" + matched +
+                                    " | muestra=" + LoggedKills);
+                    }
                     if (matched > 0)
                     {
                         Dirty = true;
@@ -201,7 +228,7 @@ namespace BSGBestiary
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Bestiario] Error en EntityKilled v0.21: " + ex);
+                Log.Error("[BSG Bestiario] Error en EntityKilled v0.25: " + ex);
             }
         }
 
