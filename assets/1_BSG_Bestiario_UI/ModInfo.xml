@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml>
-  <ModInfo>
-    <Name value="BSG_Bestiario_UI_Button"/>
-    <DisplayName value="BSG Bestiario - Boton de Personaje"/>
-    <Description value="Abre el Bestiario desde el panel de personaje sin teclas asignadas."/>
-    <Author value="BSG"/>
-    <Version value="0.26.0"/>
-  </ModInfo>
+  <Name value="BSG_Bestiario_UI_Button" />
+  <DisplayName value="BSG Bestiario - Boton B de Personaje" />
+  <Description value="Boton del Bestiario al lado de Titulos, Vanilla/Rebirth 2.6." />
+  <Author value="BSG" />
+  <Version value="0.26.0" />
 </xml>
