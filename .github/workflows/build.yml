@@ -51,19 +51,37 @@ jobs:
         shell: powershell
         run: .\build.ps1
 
-      - name: Package BSG v0.19 DLL update
+      - name: Package BSG v0.20-0.23 update
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "package/0_BSG_Bestiario" | Out-Null
           Copy-Item "out/bsg_BestiaryChronicle.dll" "package/0_BSG_Bestiario/bsg_BestiaryChronicle.dll" -Force
-          Compress-Archive -Path "package/0_BSG_Bestiario" -DestinationPath "out/BSG_Bestiario_v0.19_DLL_ACTUALIZACION.zip" -Force
+          @'
+BSG BESTIARIO - Paquete integrado v0.20 / v0.21 / v0.22 / v0.23
+Instalacion: extraer este paquete sobre Mods, sobrescribiendo la DLL.
+REQUISITO: mantener el mod existente 0_BSG_Bestiario, con PlayerTitles.dll y sus XML.
+No sobrescribe Config/playertitles.xml, buffs.xml, XUi ni thresholds.
+
+F8 abre/cierra la nueva interfaz Bestiario dentro del juego.
+Seleccionar una familia con el mouse. AvPag/RePag cambia de familia.
+La lista de criaturas solo muestra tipos descubiertos luego de instalar esta version.
+Las bajas mostradas son las registradas desde v0.21; NO incluyen las historicas.
+Los titulos y sus requisitos siguen siendo gestionados por PlayerTitles.
+El registro adicional se guarda en bsg_bestiary_kills.xml en el directorio del mundo.
+El estado anterior de maestrias se mantiene en bsg_bestiary_state.xml.
+Para diagnostico, buscar [BSG Bestiario] AUDITORIA en el log.
+
+LIMITE ACTUAL: los tests sobre el juego real y dedicado todavia no se realizaron;
+la sincronizacion multiplayer de esos contadores queda para v0.24.
+'@ | Set-Content -Encoding UTF8 -Path "package/0_BSG_Bestiario/BSG_LEEME_v0.23.txt"
+          Compress-Archive -Path "package/0_BSG_Bestiario" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.20-0.23_ACTUALIZACION.zip" -Force
 
       - name: Upload BSG update ZIP
         id: upload_package
         uses: actions/upload-artifact@v4
         with:
-          name: BSG_Bestiario_v0.19_DLL_ACTUALIZACION
-          path: out/BSG_Bestiario_v0.19_DLL_ACTUALIZACION.zip
+          name: BSG_Bestiario_Rebirth26_v0.20-0.23_ACTUALIZACION
+          path: out/BSG_Bestiario_Rebirth26_v0.20-0.23_ACTUALIZACION.zip
           if-no-files-found: error
 
       - name: Publish build pointer
@@ -75,7 +93,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "build-output" | Out-Null
           [pscustomobject]@{
-            version = "0.19"
+            version = "0.23"
             workflow_run_id = [long]$env:BSG_RUN_ID
             artifact_id = [long]$env:BSG_ARTIFACT_ID
             commit = $env:BSG_SOURCE_SHA
