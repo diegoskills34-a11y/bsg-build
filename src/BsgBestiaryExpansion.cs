@@ -378,7 +378,7 @@ namespace BSGBestiary
                 GameObject g = new GameObject("BSG_Bestiario_Overlay");
                 UnityEngine.Object.DontDestroyOnLoad(g);
                 Instance = g.AddComponent<BestiaryOverlay>();
-                Log.Out("[BSG Bestiario] UI v0.22/0.23 creada. F8 abre el Bestiario.");
+                Log.Out("[BSG Bestiario] UI v0.24 preparada. Se abre con el boton del personaje.");
             }
             catch (Exception ex)
             {
@@ -386,21 +386,11 @@ namespace BSGBestiary
             }
         }
 
-        private void Update()
+        public static void Toggle()
         {
-            try
-            {
-                if (Input.GetKeyDown(KeyCode.F8)) opened = !opened;
-                if (!opened) return;
-                if (Input.GetKeyDown(KeyCode.Escape)) opened = false;
-                if (Input.GetKeyDown(KeyCode.PageDown)) selected++;
-                if (Input.GetKeyDown(KeyCode.PageUp)) selected--;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("[BSG Bestiario] Error en hotkey F8: " + ex.Message);
-                opened = false;
-            }
+            if (Instance == null) Attach();
+            if (Instance == null) return;
+            Instance.opened = !Instance.opened;
         }
 
         private void EnsureStyles()
@@ -464,7 +454,7 @@ namespace BSGBestiary
             GUILayout.Label("BSG  /  BESTIARIO", titleStyle, GUILayout.ExpandWidth(true));
             if (GUILayout.Button("CERRAR  X", GUILayout.Width(110), GUILayout.Height(32))) opened = false;
             GUILayout.EndHorizontal();
-            GUILayout.Label("F8: abrir/cerrar   |   Seleccionar familia con clic o AvPag/RePag   |   Estadisticas desde v0.21", subduedStyle);
+            GUILayout.Label("Bestiario: seleccionar familia con el mouse   |   Estadisticas registradas desde v0.21", subduedStyle);
             GUILayout.Space(9f);
 
             GUILayout.BeginHorizontal();
