@@ -23,14 +23,14 @@ namespace BSGBestiary
                 ModEvents.GameUpdate.RegisterHandler(OnGameUpdate);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v018");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v019");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.18 inicializada. Recompensas del bestiario por 15 familias.");
+                Log.Out("[BSG Chronicle] v0.19 inicializada. Auditoria de recompensas y persistencia protegida.");
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Chronicle] Error inicializando v0.11: " + ex);
+                Log.Error("[BSG Chronicle] Error inicializando v0.19: " + ex);
             }
         }
 
@@ -122,6 +122,7 @@ namespace BSGBestiary
                 }
 
                 Log.Out("[BSG Chronicle] Catalogo cargado: " + ByText.Count + " titulos.");
+                AuditRewardBuffs(dir);
             }
             catch (Exception ex)
             {
@@ -135,21 +136,109 @@ namespace BSGBestiary
             return a == null ? string.Empty : a.Value;
         }
 
+        // Valida que cada recompensa referenciada por playertitles.xml exista
+        // realmente en el XML de buffs del mod, sin modificar recompensas.
+        private static void AuditRewardBuffs(string modDirectory)
+        {
+            try
+            {
+                HashSet<string> families = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                HashSet<string> referenced = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                Dictionary<string, string> owners = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                int missingReference = 0;
+                int sharedAcrossFamilies = 0;
+                foreach (ChronicleTitleInfo info in ByText.Values)
+                {
+                    if (!string.IsNullOrEmpty(info.CategoryId))
+                        families.Add(info.CategoryId);
+                    if (info.RewardDamagePct <= 0f && info.RewardDismemberPct <= 0f)
+                        continue;
+                    if (string.IsNullOrEmpty(info.RewardBuff))
+                    {
+                        missingReference++;
+                        Log.Out("[BSG Bestiario] AUDITORIA: sin reward_buff para " + info.Text);
+                        continue;
+                    }
+
+                    referenced.Add(info.RewardBuff);
+                    string owner;
+                    if (owners.TryGetValue(info.RewardBuff, out owner))
+                    {
+                        if (!string.Equals(owner, info.CategoryId, StringComparison.OrdinalIgnoreCase))
+                        {
+                            sharedAcrossFamilies++;
+                            Log.Out("[BSG Bestiario] AUDITORIA: buff compartido por familias " +
+                                    owner + " / " + info.CategoryId + ": " + info.RewardBuff);
+                        }
+                    }
+                    else
+                    {
+                        owners.Add(info.RewardBuff, info.CategoryId);
+                    }
+                }
+
+                string buffsPath = Path.Combine(modDirectory, "Config", "buffs.xml");
+                if (!File.Exists(buffsPath))
+                {
+                    Log.Out("[BSG Bestiario] AUDITORIA: Config/buffs.xml ausente; no puedo verificar " +
+                            referenced.Count + " definiciones.");
+                    return;
+                }
+
+                HashSet<string> defined = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                XDocument buffDocument = XDocument.Load(buffsPath);
+                foreach (XElement buff in buffDocument.Descendants("buff"))
+                {
+                    string name = Attr(buff, "name");
+                    if (!string.IsNullOrEmpty(name))
+                        defined.Add(name);
+                }
+
+                int missingDefinitions = 0;
+                foreach (string buff in referenced)
+                {
+                    if (defined.Contains(buff)) continue;
+                    missingDefinitions++;
+                    Log.Out("[BSG Bestiario] AUDITORIA: buff no definido en Config/buffs.xml: " + buff);
+                }
+
+                Log.Out("[BSG Bestiario] AUDITORIA v0.19: familias=" + families.Count +
+                        " | buffs referenciados=" + referenced.Count +
+                        " | buffs definidos=" + defined.Count +
+                        " | referencias faltantes=" + missingReference +
+                        " | definiciones faltantes=" + missingDefinitions +
+                        " | buffs entre familias=" + sharedAcrossFamilies +
+                        ". Revisar en juego el filtro de daño por familia.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[BSG Bestiario] AUDITORIA: error leyendo configuracion de recompensas: " + ex);
+            }
+        }
+
+
         public static ChronicleTitleInfo Find(string title)
         {
             if (string.IsNullOrEmpty(title)) return null;
 
             ChronicleTitleInfo info;
-            if (ByText.TryGetValue(title, out info)) return info;
+            string search = title.Trim();
+            if (ByText.TryGetValue(search, out info)) return info;
 
+            // Aceptamos el titulo dentro de un mensaje de PlayerTitles, pero nunca
+            // interpretamos un titulo incompleto como otro titulo mas largo.
+            ChronicleTitleInfo best = null;
+            int longest = 0;
             foreach (KeyValuePair<string, ChronicleTitleInfo> pair in ByText)
             {
-                if (title.IndexOf(pair.Key, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    pair.Key.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0)
-                    return pair.Value;
+                if (search.IndexOf(pair.Key, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                    pair.Key.Length > longest)
+                {
+                    best = pair.Value;
+                    longest = pair.Key.Length;
+                }
             }
-
-            return null;
+            return best;
         }
 
         public static string BuildTooltip(string title)
@@ -420,6 +509,7 @@ namespace BSGBestiary
         private static readonly Dictionary<string, HashSet<string>> Unlocked =
             new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
         private static string LoadedPath = string.Empty;
+        private static bool RecoveredFromBackup;
 
         private static string GetPath()
         {
@@ -436,35 +526,60 @@ namespace BSGBestiary
 
             Unlocked.Clear();
             LoadedPath = path;
+            RecoveredFromBackup = false;
 
             if (!File.Exists(path)) return;
 
             try
             {
-                XDocument doc = XDocument.Load(path);
-                XElement root = doc.Root;
-                if (root == null) return;
-
-                foreach (XElement p in root.Elements("player"))
-                {
-                    string name = (string)p.Attribute("name") ?? string.Empty;
-                    if (string.IsNullOrEmpty(name)) continue;
-
-                    HashSet<string> set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-                    foreach (XElement t in p.Elements("title"))
-                    {
-                        string id = (string)t.Attribute("id") ?? string.Empty;
-                        if (!string.IsNullOrEmpty(id)) set.Add(id);
-                    }
-                    Unlocked[name] = set;
-                }
-
+                ReadState(path);
                 Log.Out("[BSG Bestiario] Estado persistente cargado: " + path);
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Bestiario] No pude cargar estado: " + ex);
+                Log.Error("[BSG Bestiario] Archivo principal invalido: " + ex);
+                Unlocked.Clear();
+                string backup = path + ".bak";
+                if (!File.Exists(backup)) return;
+                try
+                {
+                    ReadState(backup);
+                    RecoveredFromBackup = true;
+                    Log.Out("[BSG Bestiario] Estado recuperado de respaldo: " + backup);
+                }
+                catch (Exception backupEx)
+                {
+                    Unlocked.Clear();
+                    Log.Error("[BSG Bestiario] Respaldo tambien invalido: " + backupEx);
+                }
             }
+        }
+
+        private static void ReadState(string path)
+        {
+            XDocument doc = XDocument.Load(path);
+            XElement root = doc.Root;
+            if (root == null || root.Name.LocalName != "bsgBestiary")
+                throw new InvalidDataException("La raiz de estado no es bsgBestiary");
+
+            Dictionary<string, HashSet<string>> fromDisk =
+                new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+            foreach (XElement p in root.Elements("player"))
+            {
+                string name = (string)p.Attribute("name") ?? string.Empty;
+                if (string.IsNullOrEmpty(name)) continue;
+
+                HashSet<string> set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                foreach (XElement t in p.Elements("title"))
+                {
+                    string id = (string)t.Attribute("id") ?? string.Empty;
+                    if (!string.IsNullOrEmpty(id)) set.Add(id);
+                }
+                fromDisk[name] = set;
+            }
+            Unlocked.Clear();
+            foreach (KeyValuePair<string, HashSet<string>> entry in fromDisk)
+                Unlocked[entry.Key] = entry.Value;
         }
 
         public static void Unlock(string playerName, string title)
@@ -559,11 +674,25 @@ namespace BSGBestiary
                         p.Add(new XElement("title", new XAttribute("id", title)));
                     root.Add(p);
                 }
-                new XDocument(root).Save(path);
+                string tempPath = path + ".tmp";
+                string backupPath = path + ".bak";
+                new XDocument(root).Save(tempPath);
+                if (RecoveredFromBackup && File.Exists(backupPath))
+                {
+                    // Conservamos el original danado antes de restaurar la copia sana.
+                    if (File.Exists(path))
+                        File.Copy(path, path + ".corrupt", true);
+                    File.Copy(backupPath, path, true);
+                    RecoveredFromBackup = false;
+                }
+                if (File.Exists(path))
+                    File.Replace(tempPath, path, backupPath);
+                else
+                    File.Move(tempPath, path);
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Bestiario] No pude guardar estado: " + ex);
+                Log.Error("[BSG Bestiario] No pude guardar estado de forma segura: " + ex);
             }
         }
     }
