@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v025pretest");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v026standalone");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.25 PRETEST inicializada. XML y XPath 2.6 validados en CI, contador entityId y diagnosticos.");
+                Log.Out("[BSG Chronicle] v0.26 STANDALONE inicializada. Catalogo, Crónica y Bestiario Vanilla/Rebirth 2.6.");
             }
             catch (Exception ex)
             {
@@ -368,6 +368,8 @@ namespace BSGBestiary
             {
                 string id = string.IsNullOrEmpty(tier.CategoryId) ? tier.KillEntity : tier.CategoryId;
                 if (string.IsNullOrEmpty(id)) continue;
+                // La categoria temporal de pruebas desbloquea titulos, pero no es una familia real.
+                if (string.Equals(id, "bsg_test", StringComparison.OrdinalIgnoreCase)) continue;
                 BestiaryFamilyDefinition family;
                 if (!byId.TryGetValue(id, out family))
                 {
