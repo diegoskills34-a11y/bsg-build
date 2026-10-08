@@ -21,16 +21,17 @@ namespace BSGBestiary
             {
                 ChronicleCatalog.Load();
                 ModEvents.GameUpdate.RegisterHandler(OnGameUpdate);
+                ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v019");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v02023");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.19 inicializada. Auditoria de recompensas y persistencia protegida.");
+                Log.Out("[BSG Chronicle] v0.20-0.23 inicializada. Auditoria, registro de bajas y explorador F8.");
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Chronicle] Error inicializando v0.19: " + ex);
+                Log.Error("[BSG Chronicle] Error inicializando v0.20-0.23: " + ex);
             }
         }
 
@@ -38,6 +39,7 @@ namespace BSGBestiary
         {
             ChronicleState.Tick();
             BestiaryRewardBuff.EnsureLocalPlayerReward();
+            BestiaryTracker.Tick();
         }
 
         private static void OnPlayerSpawnedInWorld(ref ModEvents.SPlayerSpawnedInWorldData data)
@@ -46,6 +48,7 @@ namespace BSGBestiary
             {
                 if (!data.IsLocalPlayer) return;
                 BestiaryRewardBuff.ApplyCurrentRewards(GameManager.Instance.World.GetPrimaryPlayer());
+                BestiaryOverlay.Attach();
             }
             catch (Exception ex)
             {
@@ -195,11 +198,36 @@ namespace BSGBestiary
                 }
 
                 int missingDefinitions = 0;
+                int missingEffect = 0;
                 foreach (string buff in referenced)
                 {
-                    if (defined.Contains(buff)) continue;
-                    missingDefinitions++;
-                    Log.Out("[BSG Bestiario] AUDITORIA: buff no definido en Config/buffs.xml: " + buff);
+                    if (!defined.Contains(buff))
+                    {
+                        missingDefinitions++;
+                        Log.Out("[BSG Bestiario] AUDITORIA: buff no definido en Config/buffs.xml: " + buff);
+                        continue;
+                    }
+                    bool hasRewardEffect = false;
+                    foreach (XElement candidate in buffDocument.Descendants("buff"))
+                    {
+                        if (!string.Equals(Attr(candidate, "name"), buff, StringComparison.OrdinalIgnoreCase))
+                            continue;
+                        foreach (XElement effect in candidate.Descendants("passive_effect"))
+                        {
+                            string effectName = Attr(effect, "name");
+                            if (string.Equals(effectName, "DamageModifier", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(effectName, "DismemberChance", StringComparison.OrdinalIgnoreCase))
+                            {
+                                hasRewardEffect = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!hasRewardEffect)
+                    {
+                        missingEffect++;
+                        Log.Out("[BSG Bestiario] AUDITORIA: sin efecto DamageModifier/DismemberChance visible: " + buff);
+                    }
                 }
 
                 Log.Out("[BSG Bestiario] AUDITORIA v0.19: familias=" + families.Count +
@@ -207,6 +235,7 @@ namespace BSGBestiary
                         " | buffs definidos=" + defined.Count +
                         " | referencias faltantes=" + missingReference +
                         " | definiciones faltantes=" + missingDefinitions +
+                        " | sin efectos visibles=" + missingEffect +
                         " | buffs entre familias=" + sharedAcrossFamilies +
                         ". Revisar en juego el filtro de daño por familia.");
             }
@@ -296,6 +325,38 @@ namespace BSGBestiary
         public static IEnumerable<string> KnownTitles()
         {
             return ByText.Keys;
+        }
+
+        // Un catálogo compartido alimenta la auditoría, el registro de bajas y el visor.
+        public static List<BestiaryFamilyDefinition> GetFamilies()
+        {
+            Dictionary<string, BestiaryFamilyDefinition> byId =
+                new Dictionary<string, BestiaryFamilyDefinition>(StringComparer.OrdinalIgnoreCase);
+            foreach (ChronicleTitleInfo tier in ByText.Values)
+            {
+                string id = string.IsNullOrEmpty(tier.CategoryId) ? tier.KillEntity : tier.CategoryId;
+                if (string.IsNullOrEmpty(id)) continue;
+                BestiaryFamilyDefinition family;
+                if (!byId.TryGetValue(id, out family))
+                {
+                    family = new BestiaryFamilyDefinition {
+                        Id = id,
+                        Name = string.IsNullOrEmpty(tier.CategoryName) ? id : tier.CategoryName,
+                        MatchClass = tier.KillEntity
+                    };
+                    byId[id] = family;
+                }
+                family.Tiers.Add(tier);
+            }
+            List<BestiaryFamilyDefinition> result = new List<BestiaryFamilyDefinition>(byId.Values);
+            result.Sort(delegate(BestiaryFamilyDefinition a, BestiaryFamilyDefinition b) {
+                return string.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase);
+            });
+            foreach (BestiaryFamilyDefinition family in result)
+                family.Tiers.Sort(delegate(ChronicleTitleInfo a, ChronicleTitleInfo b) {
+                    return a.Threshold.CompareTo(b.Threshold);
+                });
+            return result;
         }
 
         public static IEnumerable<string> KnownRewardBuffs()
