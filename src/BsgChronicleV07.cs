@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v026standalone");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v027ui");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.26 STANDALONE inicializada. Catalogo, Crónica y Bestiario Vanilla/Rebirth 2.6.");
+                Log.Out("[BSG Chronicle] v0.27 UI inicializada. Boton Bestiario y Cronica sincronizados con chat.");
             }
             catch (Exception ex)
             {
@@ -51,6 +51,7 @@ namespace BSGBestiary
                 if (!data.IsLocalPlayer) return;
                 BestiaryRewardBuff.ApplyCurrentRewards(GameManager.Instance.World.GetPrimaryPlayer());
                 BestiaryOverlay.Attach();
+                ChronicleState.BindLocal(GameManager.Instance.World.GetPrimaryPlayer() as EntityPlayerLocal);
             }
             catch (Exception ex)
             {
@@ -422,6 +423,11 @@ namespace BSGBestiary
         private static EntityPlayerLocal LocalPlayer;
         private static DateTime NextUiTickUtc = DateTime.MinValue;
 
+        public static void BindLocal(EntityPlayerLocal player)
+        {
+            if (player != null) LocalPlayer = player;
+        }
+
         public static void Publish(EntityPlayerLocal localPlayer, string playerName, string title)
         {
             if (string.IsNullOrEmpty(title)) return;
@@ -453,7 +459,10 @@ namespace BSGBestiary
                 if (now < NextUiTickUtc) return;
                 NextUiTickUtc = now.AddMilliseconds(200);
 
-                if (LocalPlayer == null || Entries.Count == 0) return;
+                if (LocalPlayer == null && GameManager.Instance != null &&
+                    GameManager.Instance.World != null)
+                    LocalPlayer = GameManager.Instance.World.GetPrimaryPlayer() as EntityPlayerLocal;
+                if (LocalPlayer == null) return;
                 ApplyUi(false);
             }
             catch (Exception ex)
@@ -480,7 +489,8 @@ namespace BSGBestiary
 
                 XUi xui = LocalPlayer.PlayerUI.xui;
                 XUiV_Window chatWindow = xui.GetWindow("chat");
-                bool chatOpen = chatWindow != null && chatWindow.IsVisible;
+                // El estado IsVisible puede no reflejar el cierre real del chat.
+                bool chatOpen = ChatUiState.IsOpen;
 
                 XUiV_Window tickerWindow = xui.GetWindow("bsgChronicleTicker");
                 XUiV_Window historyWindow = xui.GetWindow("bsgChronicleHistory");
@@ -502,8 +512,18 @@ namespace BSGBestiary
                     return;
                 }
 
+                if (historyWindow != null)
+                    historyWindow.ForceVisible(0f);
                 if (historyRoot != null && historyRoot.ViewComponent != null)
                     historyRoot.ViewComponent.IsVisible = false;
+
+                if (Entries.Count == 0)
+                {
+                    if (tickerWindow != null) tickerWindow.ForceVisible(0f);
+                    if (tickerRoot != null && tickerRoot.ViewComponent != null)
+                        tickerRoot.ViewComponent.IsVisible = false;
+                    return;
+                }
 
                 ChronicleEntry latest = Entries[0];
                 double age = (DateTime.UtcNow - latest.CreatedUtc).TotalSeconds;
@@ -969,10 +989,56 @@ namespace BSGBestiary
         }
     }
 
+    public static class ChatUiState
+    {
+        public static bool IsOpen;
+        public static void Changed(bool open)
+        {
+            IsOpen = open;
+            Log.Out("[BSG Chronicle] Chat " + (open ? "abierto" : "cerrado"));
+        }
+    }
+
+    [HarmonyPatch]
+    public static class ChatUiOpenClosePatch
+    {
+        private static IEnumerable<MethodBase> TargetMethods()
+        {
+            Type t = AccessTools.TypeByName("XUiC_Chat");
+            if (t == null)
+            {
+                Log.Out("[BSG Chronicle] No se encontro XUiC_Chat.");
+                yield break;
+            }
+            foreach (string name in new string[] { "OnOpen", "OnClose" })
+            {
+                MethodInfo m = AccessTools.DeclaredMethod(t, name);
+                if (m == null) m = AccessTools.Method(t, name);
+                if (m != null)
+                {
+                    Log.Out("[BSG Chronicle] Hook chat: " + m.DeclaringType.FullName + "." + name);
+                    yield return m;
+                }
+                else Log.Out("[BSG Chronicle] Metodo chat faltante: " + name);
+            }
+        }
+
+        [HarmonyPostfix]
+        private static void Postfix(MethodBase __originalMethod)
+        {
+            if (__originalMethod != null)
+                ChatUiState.Changed(__originalMethod.Name == "OnOpen");
+        }
+    }
+
+    // Suscribirse al boton desde el controlador de personaje y no solo
+    // desde el arbol global de XUi: los controles de ventanas no siempre
+    // aparecen en xui.GetChildById().
     public static class BestiaryButtonBridge
     {
-        private static XUiController current;
+        private static XUiController bound;
         private static DateTime nextCheckUtc = DateTime.MinValue;
+        private static DateTime nextLogUtc = DateTime.MinValue;
 
         public static void Tick()
         {
@@ -983,27 +1049,84 @@ namespace BSGBestiary
                 if (GameManager.Instance == null || GameManager.Instance.World == null) return;
                 EntityPlayerLocal local = GameManager.Instance.World.GetPrimaryPlayer() as EntityPlayerLocal;
                 if (local == null || local.PlayerUI == null || local.PlayerUI.xui == null) return;
-                XUiController button = local.PlayerUI.xui.GetChildById("bsgBestiaryButton");
-                if (ReferenceEquals(current, button)) return;
-                if (current != null) current.OnPress -= HandlePress;
-                current = button;
-                if (current != null)
+                XUi xui = local.PlayerUI.xui;
+                XUiController frame = xui.GetChildById("CharacterFrameWindow");
+                if (frame != null) Bind(frame);
+                if (bound == null)
                 {
-                    current.OnPress += HandlePress;
-                    Log.Out("[BSG Bestiario] Boton de Bestiario conectado al panel Personaje.");
+                    XUiController btn = xui.GetChildById("bsgBestiaryButton");
+                    if (btn != null) BindButton(btn);
+                }
+                if (bound == null && DateTime.UtcNow >= nextLogUtc)
+                {
+                    nextLogUtc = DateTime.UtcNow.AddSeconds(30);
+                    Log.Out("[BSG Bestiario] DIAG: boton B no encontrado aun.");
                 }
             }
             catch (Exception ex)
             {
-                if (DateTime.UtcNow > nextCheckUtc.AddSeconds(10))
-                    Log.Error("[BSG Bestiario] Error buscando boton: " + ex.Message);
+                if (DateTime.UtcNow >= nextLogUtc)
+                {
+                    nextLogUtc = DateTime.UtcNow.AddSeconds(30);
+                    Log.Error("[BSG Bestiario] DIAG: error conectando boton B: " + ex);
+                }
             }
+        }
+
+        public static void Bind(XUiController frame)
+        {
+            if (frame == null) return;
+            XUiController button = frame.GetChildById("bsgBestiaryButton");
+            if (button != null) BindButton(button);
+        }
+
+        private static void BindButton(XUiController button)
+        {
+            if (object.ReferenceEquals(bound, button)) return;
+            if (bound != null) bound.OnPress -= HandlePress;
+            bound = button;
+            bound.OnPress += HandlePress;
+            Log.Out("[BSG Bestiario] Boton B conectado: " + bound.GetType().FullName);
         }
 
         private static void HandlePress(XUiController sender, int mouseButton)
         {
+            Log.Out("[BSG Bestiario] Click boton B: " + mouseButton);
             if (mouseButton == 0)
                 BestiaryOverlay.Toggle();
+        }
+    }
+
+    [HarmonyPatch]
+    public static class CharacterFrameBestiaryPatch
+    {
+        private static IEnumerable<MethodBase> TargetMethods()
+        {
+            Type t = AccessTools.TypeByName("XUiC_CharacterFrameWindow");
+            if (t == null)
+            {
+                Log.Out("[BSG Bestiario] No se encontro XUiC_CharacterFrameWindow.");
+                yield break;
+            }
+            foreach (string name in new string[] { "Init", "OnOpen" })
+            {
+                MethodInfo method = AccessTools.DeclaredMethod(t, name);
+                if (method != null)
+                {
+                    Log.Out("[BSG Bestiario] Hook de personaje: " + name);
+                    yield return method;
+                }
+            }
+        }
+
+        [HarmonyPostfix]
+        private static void Postfix(object __instance)
+        {
+            try { BestiaryButtonBridge.Bind(__instance as XUiController); }
+            catch (Exception ex)
+            {
+                Log.Out("[BSG Bestiario] DIAG: intento de conexion diferido: " + ex.Message);
+            }
         }
     }
 
