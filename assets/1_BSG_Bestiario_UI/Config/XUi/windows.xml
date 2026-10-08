@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configs>
-  <!-- Vanilla / Rebirth 2.6: XUi. Se agrega sin modificar el boton de Titulos existente. -->
-  <append xpath="/windows/window[@name='CharacterFrameWindow']/panel[@name='header']">
-    <simplebutton name="bsgBestiaryButton" depth="15" pos="174,-7" width="24" height="29"
-                  caption="B" font_size="21" tooltip="Abrir Bestiario BSG"/>
+  <!-- En Vanilla/Rebirth 2.6 el boton de Titulos BSG se ubica a -38.
+       Bestiario usa el mismo contenedor root y estilo a la izquierda,
+       sin tocar el panel ni el resto de la interfaz. -->
+  <append xpath="/windows/window[@name='CharacterFrameWindow']">
+    <button depth="19" name="bsgBestiaryButton" pos="-76,-8" width="34" height="34"
+            sprite="menu_empty2px" defaultcolor="20,20,20,230"
+            hoversprite="menu_empty2px" hovercolor="255,150,20,255"
+            type="sliced" hoverscale="1.0" font_size="20"
+            caption="B" tooltip="Bestiario" sound="[paging_click]"/>
   </append>
 </configs>
