@@ -34,7 +34,9 @@ Get-ChildItem $managed -Filter *.dll | Sort-Object Name | ForEach-Object {
     $lines += ('/reference:"' + $_.FullName + '"')
 }
 $lines += ('/reference:"' + $harmony + '"')
-$lines += ('"' + (Join-Path $env:GITHUB_WORKSPACE 'src\BsgChronicleV07.cs') + '"')
+Get-ChildItem (Join-Path $env:GITHUB_WORKSPACE 'src') -Filter *.cs | Sort-Object Name | ForEach-Object {
+    $lines += ('"' + $_.FullName + '"')
+}
 $lines | Set-Content -Path $rsp -Encoding UTF8
 
 New-Item -ItemType Directory -Force -Path (Join-Path $env:GITHUB_WORKSPACE 'out') | Out-Null
