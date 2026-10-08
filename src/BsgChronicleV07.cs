@@ -25,14 +25,14 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v024fix");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v025pretest");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.24 fix inicializada. Bestiario por boton, autoprogramacion XML y rewards compatibles.");
+                Log.Out("[BSG Chronicle] v0.25 PRETEST inicializada. XML y XPath 2.6 validados en CI, contador entityId y diagnosticos.");
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Chronicle] Error inicializando v0.20-0.23: " + ex);
+                Log.Error("[BSG Chronicle] Error inicializando v0.25: " + ex);
             }
         }
 
@@ -128,6 +128,15 @@ namespace BSGBestiary
                 }
 
                 Log.Out("[BSG Chronicle] Catalogo cargado: " + ByText.Count + " titulos.");
+                List<BestiaryFamilyDefinition> familias = GetFamilies();
+                Log.Out("[BSG Bestiario] DIAG: familias cargadas=" + familias.Count + " (esperado=15).");
+                if (familias.Count != 15)
+                    Log.Out("[BSG Bestiario] AVISO: cantidad de familias distinta de 15, revisar Config/playertitles.xml.");
+                foreach (BestiaryFamilyDefinition familia in familias)
+                {
+                    if (string.IsNullOrEmpty(familia.MatchClass))
+                        Log.Out("[BSG Bestiario] AVISO: categoria sin kill_entity: " + familia.Id);
+                }
                 AuditRewardBuffs(dir);
             }
             catch (Exception ex)
