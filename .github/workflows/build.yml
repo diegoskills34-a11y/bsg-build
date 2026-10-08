@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -48,9 +51,39 @@ jobs:
         shell: powershell
         run: .\build.ps1
 
-      - name: Upload DLL
+      - name: Package BSG v0.19 DLL update
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path "package/0_BSG_Bestiario" | Out-Null
+          Copy-Item "out/bsg_BestiaryChronicle.dll" "package/0_BSG_Bestiario/bsg_BestiaryChronicle.dll" -Force
+          Compress-Archive -Path "package/0_BSG_Bestiario" -DestinationPath "out/BSG_Bestiario_v0.19_DLL_ACTUALIZACION.zip" -Force
+
+      - name: Upload BSG update ZIP
+        id: upload_package
         uses: actions/upload-artifact@v4
         with:
-          name: bsg-BestiaryChronicle-v0.7
-          path: out/bsg_BestiaryChronicle.dll
+          name: BSG_Bestiario_v0.19_DLL_ACTUALIZACION
+          path: out/BSG_Bestiario_v0.19_DLL_ACTUALIZACION.zip
           if-no-files-found: error
+
+      - name: Publish build pointer
+        shell: powershell
+        env:
+          BSG_ARTIFACT_ID: ${{ steps.upload_package.outputs.artifact-id }}
+          BSG_RUN_ID: ${{ github.run_id }}
+          BSG_SOURCE_SHA: ${{ github.sha }}
+        run: |
+          New-Item -ItemType Directory -Force -Path "build-output" | Out-Null
+          [pscustomobject]@{
+            version = "0.19"
+            workflow_run_id = [long]$env:BSG_RUN_ID
+            artifact_id = [long]$env:BSG_ARTIFACT_ID
+            commit = $env:BSG_SOURCE_SHA
+            package_type = "update_dll_only"
+          } | ConvertTo-Json | Set-Content -Path "build-output/latest-artifact.json" -Encoding UTF8
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add build-output/latest-artifact.json
+          git commit -m "ci: record compiled v0.19 package [skip ci]"
+          git push origin HEAD:main
+
