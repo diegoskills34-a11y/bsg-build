@@ -75,14 +75,14 @@ jobs:
 
       - name: Verify packaged ZIP against Vanilla v2.6
         shell: powershell
-        run: python scripts/preflight_v26.py --package out/BSG_Bestiario_Rebirth26_v0.27_UI_CHAT_HOTFIX.zip
+        run: python scripts/preflight_v26.py --package out/BSG_Bestiario_Rebirth26_v0.28_BOTON_CONTROLADOR_FIX.zip
 
       - name: Upload BSG update ZIP
         id: upload_package
         uses: actions/upload-artifact@v4
         with:
           name: BSG_Bestiario_Rebirth26_v0.27_UI_CHAT_HOTFIX
-          path: out/BSG_Bestiario_Rebirth26_v0.27_UI_CHAT_HOTFIX.zip
+          path: out/BSG_Bestiario_Rebirth26_v0.28_BOTON_CONTROLADOR_FIX.zip
           if-no-files-found: error
 
       - name: Publish build pointer
