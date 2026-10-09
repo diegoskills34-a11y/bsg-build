@@ -106,7 +106,7 @@ def verify_source():
     test("bounded logging for accepted kills", "LoggedKills <= 12" in expansion)
     test("button subscribed to native XUi press",
          'GetChildById("bsgBestiaryButton")' in chronicle and
-         "bound.OnPress += HandlePress;" in chronicle)
+         "boundSimple.OnPressed += HandlePress;" in chronicle)
     test("XML repair keeps old title data in backup",
          ".bsg_antes_de_reparar.bak" in chronicle)
     test("15-family catalog populated from editable XML",
