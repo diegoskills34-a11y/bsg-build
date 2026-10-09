@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v029insidewindow");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v030click");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.29 Boton B dentro de CharacterFrameWindow y sobre TitlesPanel. Esperando click.");
+                Log.Out("[BSG Chronicle] v0.30 Bestiario: XUiC_SimpleButton.OnPressed conectado; no se altera posicion ni apariencia.");
             }
             catch (Exception ex)
             {
@@ -1042,6 +1042,7 @@ namespace BSGBestiary
     public static class BestiaryButtonBridge
     {
         private static XUiController bound;
+        private static XUiC_SimpleButton boundSimple;
         private static DateTime nextCheckUtc = DateTime.MinValue;
         private static DateTime nextLogUtc = DateTime.MinValue;
 
@@ -1088,16 +1089,28 @@ namespace BSGBestiary
         private static void BindButton(XUiController button)
         {
             if (object.ReferenceEquals(bound, button)) return;
-            if (bound != null) bound.OnPress -= HandlePress;
+            // XUiC_SimpleButton propaga el click del hijo "clickable"
+            // mediante SU propio evento OnPressed, no OnPress de XUiController.
+            if (boundSimple != null) boundSimple.OnPressed -= HandlePress;
+            else if (bound != null) bound.OnPress -= HandlePress;
             bound = button;
-            bound.OnPress += HandlePress;
-            Log.Out("[BSG Bestiario] Boton B conectado al controlador: " + bound.GetType().FullName +
-                    " (esperado: XUiC_SimpleButton)");
+            boundSimple = button as XUiC_SimpleButton;
+            if (boundSimple != null)
+            {
+                boundSimple.OnPressed += HandlePress;
+                Log.Out("[BSG Bestiario] Suscripto a XUiC_SimpleButton.OnPressed (evento del boton REAL).");
+            }
+            else
+            {
+                // Fallback para otros controllers sin SimpleButton.
+                bound.OnPress += HandlePress;
+                Log.Out("[BSG Bestiario] ADVERTENCIA: fallback XUiController.OnPress: " + bound.GetType().FullName);
+            }
         }
 
         private static void HandlePress(XUiController sender, int mouseButton)
         {
-            Log.Out("[BSG Bestiario] Click boton B: " + mouseButton);
+            Log.Out("[BSG Bestiario] CLICK REAL recibido en XUiC_SimpleButton.OnPressed: " + mouseButton);
             // SimpleButton ya filtra el evento al clic real; no depender
             // del indice de boton, que puede variar con input/gamepad.
             BestiaryOverlay.Toggle();
