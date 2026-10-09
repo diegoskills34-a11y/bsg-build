@@ -65,10 +65,17 @@ def validate_button(root):
         try:
             posx = int(btn.get("pos", "0,0").split(",")[0])
             width = int(btn.get("width", "0"))
-            # Títulos usa pos=-38,width=34; B tiene que quedar a su izquierda.
-            test("Bestiary B is adjacent to existing Titles T", 
-                 posx == -76 and width == 34 and posx + width <= -38,
-                 "BSG B: " + str(posx) + ".." + str(posx + width))
+            posy = int(btn.get("pos", "0,0").split(",")[1])
+            depth = int(btn.get("depth", "0"))
+            # CharacterFrameWindow width 327: -76 estaba fuera y el click
+            # no alcanzaba el controlador, aunque el tooltip funcionara.
+            test("Bestiary clickable rect inside native CharacterFrameWindow",
+                 posx == 252 and width == 34 and posx >= 0 and posx + width <= 327,
+                 "B: " + str(posx) + ".." + str(posx + width))
+            # ptTitlesPanel depth=20, header at y=-46; close button x=291.
+            test("Bestiary button over Titles panel, clear of its close button",
+                 depth > 20 and posy == -49 and posx + width < 291,
+                 "depth=" + str(depth) + " y=" + str(posy))
         except (ValueError, IndexError):
             test("button geometry numeric", False)
 

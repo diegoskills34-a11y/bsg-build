@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v028button");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v029insidewindow");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.28 boton B con XUiC_SimpleButton: controlador dedicado y diagnosticos.");
+                Log.Out("[BSG Chronicle] v0.29 Boton B dentro de CharacterFrameWindow y sobre TitlesPanel. Esperando click.");
             }
             catch (Exception ex)
             {

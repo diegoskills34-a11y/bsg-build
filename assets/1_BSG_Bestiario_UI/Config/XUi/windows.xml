@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configs>
-  <!-- 7DTD 2.6: los controles clickeables con evento OnPress necesitan
-       un XUiController; un button suelto es solo una ViewComponent.
-       La rect externa (SimpleButton) crea el controller y la tecla B visual
-       se dibuja con el button interior, al lado de Titulos T (-38). -->
+  <!-- BSG v0.29 - vanilla/Rebirth 2.6:
+       El boton v0.28 pos=-76 quedaba fuera del CharacterFrameWindow,
+       visible con tooltip pero fuera del area que entrega clicks.
+       ptTitlesPanel ocupa la zona Y=-46 y profundidad 20.
+       Colocar B dentro del panel (X 252..286), por encima del panel
+       de Titulos y a la izquierda de su boton de cierre (X 291..321). -->
   <append xpath="/windows/window[@name='CharacterFrameWindow']">
     <rect name="bsgBestiaryButton" controller="SimpleButton"
-          depth="19" pos="-76,-8" width="34" height="34"
+          depth="30" pos="252,-49" width="34" height="34"
           cursor_area="true" gamepad_selectable="true">
       <button name="clickable" depth="1" pos="0,0" width="34" height="34"
               sprite="menu_empty2px" defaultcolor="20,20,20,230"
               hoversprite="menu_empty2px" hovercolor="255,150,20,255"
               type="sliced" hoverscale="1.0"
-              caption="B" font_size="20" tooltip="Abrir Bestiario"
+              caption="B" font_size="20" tooltip="Bestiario"
               sound="[paging_click]" />
     </rect>
   </append>
