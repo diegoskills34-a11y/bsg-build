@@ -81,7 +81,7 @@ jobs:
         id: upload_package
         uses: actions/upload-artifact@v4
         with:
-          name: BSG_Bestiario_Rebirth26_v0.27_UI_CHAT_HOTFIX
+          name: BSG_Bestiario_Rebirth26_v0.28_BOTON_CONTROLADOR_FIX
           path: out/BSG_Bestiario_Rebirth26_v0.28_BOTON_CONTROLADOR_FIX.zip
           if-no-files-found: error
 
