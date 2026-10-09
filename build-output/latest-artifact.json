@@ -1,7 +1,7 @@
 ﻿{
-    "version":  "0.28",
-    "workflow_run_id":  37964124038,
-    "artifact_id":  11631874311,
-    "commit":  "b96126d1b5e57e3b13f0981112d00384e8149822",
+    "version":  "0.29",
+    "workflow_run_id":  37966167477,
+    "artifact_id":  11633761734,
+    "commit":  "7fe3e93ec152044cfbcebeda9cc3d23f52e61bf3",
     "package_type":  "update_dll_only"
 }
