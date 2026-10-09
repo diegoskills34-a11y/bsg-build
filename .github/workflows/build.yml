@@ -55,14 +55,14 @@ jobs:
         shell: powershell
         run: .\build.ps1
 
-      - name: Package BSG v0.27 button and Chronicle fix
+      - name: Package BSG v0.28 controlled clickable Bestiary B
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "package/0_BSG_Bestiario" | Out-Null
           Copy-Item "out/bsg_BestiaryChronicle.dll" "package/0_BSG_Bestiario/bsg_BestiaryChronicle.dll" -Force
           Copy-Item "assets/1_BSG_Bestiario_UI" -Destination "package/1_BSG_Bestiario_UI" -Recurse -Force
           @(
-            "BSG v0.27: Corrige click del boton B y hace que CRONICA se oculte al cerrar el chat; sin teclas asignadas.",
+            "BSG v0.28: B con controlador XUiC_SimpleButton, click diagnosticado y sin hotkeys. Crónica v0.27 preservada.",
             "Extraer sobre la carpeta Mods. Mantener 0_BSG_Bestiario de v0.24 con PlayerTitles.dll, Config y XUi originales.",
             "Nueva carpeta 1_BSG_Bestiario_UI/Config/XUi/windows.xml (Vanilla/Rebirth 2.6) agrega un boton B al encabezado del personaje.",
             "Al inicio se corrige el patron XML '<tier ... / reward_damage_pct=...>' y se respalda como .bsg_antes_de_reparar.bak.",
@@ -70,8 +70,8 @@ jobs:
             "Verificar en el log: XML de titulos reparado, Catalogo cargado, Boton de Bestiario conectado y DIAG muerte aceptada.",
             "Limites: no prueba daño por familia, sync multiplayer ni recompensas en ejecucion.",
             "El paquete es una actualizacion NO el mod completo: conservar PlayerTitles.dll, playertitles.xml, buffs.xml y tus thresholds."
-          ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.27.txt" -Encoding UTF8
-          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.27_UI_CHAT_HOTFIX.zip" -Force
+          ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.28.txt" -Encoding UTF8
+          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.28_BOTON_CONTROLADOR_FIX.zip" -Force
 
       - name: Verify packaged ZIP against Vanilla v2.6
         shell: powershell
@@ -94,7 +94,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "build-output" | Out-Null
           [pscustomobject]@{
-            version = "0.27"
+            version = "0.28"
             workflow_run_id = [long]$env:BSG_RUN_ID
             artifact_id = [long]$env:BSG_ARTIFACT_ID
             commit = $env:BSG_SOURCE_SHA
@@ -103,6 +103,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add build-output/latest-artifact.json
-          git commit -m "ci: record compiled v0.27 package [skip ci]"
+          git commit -m "ci: record compiled v0.28 package [skip ci]"
           git push origin HEAD:main
 

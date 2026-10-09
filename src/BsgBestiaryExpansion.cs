@@ -418,6 +418,7 @@ namespace BSGBestiary
             if (Instance == null) Attach();
             if (Instance == null) return;
             Instance.opened = !Instance.opened;
+            Log.Out("[BSG Bestiario] DIAG: BestiaryOverlay.Toggle => " + (Instance.opened ? "ABIERTO" : "CERRADO"));
         }
 
         private void EnsureStyles()

@@ -50,11 +50,18 @@ def validate_button(root):
     node = append_nodes[0]
     expected = "/windows/window[@name='CharacterFrameWindow']"
     test("CharacterFrameWindow 2.6 root XPath", node.get("xpath") == expected)
-    buttons = node.findall("button")
-    test("one Bestiary button", len(buttons) == 1 and
-         buttons[0].get("name") == "bsgBestiaryButton")
-    if buttons:
-        btn = buttons[0]
+    controllers = node.findall("rect")
+    test("one named Bestiary clickable controller",
+         len(controllers) == 1 and
+         controllers[0].get("name") == "bsgBestiaryButton" and
+         controllers[0].get("controller") == "SimpleButton")
+    if controllers:
+        btn = controllers[0]
+        clickable = btn.find("button")
+        test("native clickable child exists", clickable is not None and
+             clickable.get("name") == "clickable" and
+             clickable.get("caption") == "B")
+        test("mouse cursor area enabled", btn.get("cursor_area") == "true")
         try:
             posx = int(btn.get("pos", "0,0").split(",")[0])
             width = int(btn.get("width", "0"))

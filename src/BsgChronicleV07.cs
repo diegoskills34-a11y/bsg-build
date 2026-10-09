@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v027ui");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v028button");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.27 UI inicializada. Boton Bestiario y Cronica sincronizados con chat.");
+                Log.Out("[BSG Chronicle] v0.28 boton B con XUiC_SimpleButton: controlador dedicado y diagnosticos.");
             }
             catch (Exception ex)
             {
@@ -1091,14 +1091,16 @@ namespace BSGBestiary
             if (bound != null) bound.OnPress -= HandlePress;
             bound = button;
             bound.OnPress += HandlePress;
-            Log.Out("[BSG Bestiario] Boton B conectado: " + bound.GetType().FullName);
+            Log.Out("[BSG Bestiario] Boton B conectado al controlador: " + bound.GetType().FullName +
+                    " (esperado: XUiC_SimpleButton)");
         }
 
         private static void HandlePress(XUiController sender, int mouseButton)
         {
             Log.Out("[BSG Bestiario] Click boton B: " + mouseButton);
-            if (mouseButton == 0)
-                BestiaryOverlay.Toggle();
+            // SimpleButton ya filtra el evento al clic real; no depender
+            // del indice de boton, que puede variar con input/gamepad.
+            BestiaryOverlay.Toggle();
         }
     }
 
