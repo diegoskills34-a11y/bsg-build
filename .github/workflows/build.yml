@@ -55,14 +55,14 @@ jobs:
         shell: powershell
         run: .\build.ps1
 
-      - name: Package BSG v0.29 Bestiary B inside native window
+      - name: Package BSG v0.30 correct SimpleButton OnPressed
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "package/0_BSG_Bestiario" | Out-Null
           Copy-Item "out/bsg_BestiaryChronicle.dll" "package/0_BSG_Bestiario/bsg_BestiaryChronicle.dll" -Force
           Copy-Item "assets/1_BSG_Bestiario_UI" -Destination "package/1_BSG_Bestiario_UI" -Recurse -Force
           @(
-            "BSG v0.29: el boton B se ubica dentro de CharacterFrameWindow en profundidad 30, a la izquierda del cierre de Titulos. Sin hotkeys.",
+            "BSG v0.30: cambia exclusivamente la suscripcion del boton B a XUiC_SimpleButton.OnPressed; conserva interfaz y configuraciones.",
             "Extraer sobre la carpeta Mods. Mantener 0_BSG_Bestiario de v0.24 con PlayerTitles.dll, Config y XUi originales.",
             "Nueva carpeta 1_BSG_Bestiario_UI/Config/XUi/windows.xml (Vanilla/Rebirth 2.6) agrega un boton B al encabezado del personaje.",
             "Al inicio se corrige el patron XML '<tier ... / reward_damage_pct=...>' y se respalda como .bsg_antes_de_reparar.bak.",
@@ -70,19 +70,19 @@ jobs:
             "Verificar en el log: XML de titulos reparado, Catalogo cargado, Boton de Bestiario conectado y DIAG muerte aceptada.",
             "Limites: no prueba daño por familia, sync multiplayer ni recompensas en ejecucion.",
             "El paquete es una actualizacion NO el mod completo: conservar PlayerTitles.dll, playertitles.xml, buffs.xml y tus thresholds."
-          ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.29.txt" -Encoding UTF8
-          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.29_BOTON_INSIDE_WINDOW.zip" -Force
+          ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.30.txt" -Encoding UTF8
+          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.30_CLICK_EVENT_FIX.zip" -Force
 
       - name: Verify packaged ZIP against Vanilla v2.6
         shell: powershell
-        run: python scripts/preflight_v26.py --package out/BSG_Bestiario_Rebirth26_v0.29_BOTON_INSIDE_WINDOW.zip
+        run: python scripts/preflight_v26.py --package out/BSG_Bestiario_Rebirth26_v0.30_CLICK_EVENT_FIX.zip
 
       - name: Upload BSG update ZIP
         id: upload_package
         uses: actions/upload-artifact@v4
         with:
-          name: BSG_Bestiario_Rebirth26_v0.29_BOTON_INSIDE_WINDOW
-          path: out/BSG_Bestiario_Rebirth26_v0.29_BOTON_INSIDE_WINDOW.zip
+          name: BSG_Bestiario_Rebirth26_v0.30_CLICK_EVENT_FIX
+          path: out/BSG_Bestiario_Rebirth26_v0.30_CLICK_EVENT_FIX.zip
           if-no-files-found: error
 
       - name: Publish build pointer
@@ -94,7 +94,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "build-output" | Out-Null
           [pscustomobject]@{
-            version = "0.29"
+            version = "0.30"
             workflow_run_id = [long]$env:BSG_RUN_ID
             artifact_id = [long]$env:BSG_ARTIFACT_ID
             commit = $env:BSG_SOURCE_SHA
@@ -103,6 +103,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add build-output/latest-artifact.json
-          git commit -m "ci: record compiled v0.29 package [skip ci]"
+          git commit -m "ci: record compiled v0.30 package [skip ci]"
           git push origin HEAD:main
 
