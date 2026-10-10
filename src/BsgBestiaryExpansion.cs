@@ -39,6 +39,7 @@ namespace BSGBestiary
         private static int LoggedUnclassified;
         private static int LoggedKills;
         private static int SuppressedDuplicateKills;
+        private static int LoggedClassResolveFailures;
 
         private static string StatePath()
         {
@@ -123,6 +124,57 @@ namespace BSGBestiary
             Players.Clear();
             foreach (KeyValuePair<string, Dictionary<string, BestiaryFamilyCount>> p in result)
                 Players[p.Key] = p.Value;
+
+            // Solo migrar el demo observado si la clase C# anterior agrupo
+            // exactamente una baja; 2+ bajas serian ambiguas.
+            int schema;
+            if (!int.TryParse((string)xml.Root.Attribute("schema"), out schema)) schema = 1;
+            if (schema < 2 && RecoverLegacyDemolisher())
+            {
+                Dirty = true;
+                NextSaveUtc = DateTime.UtcNow;
+                Log.Out("[BSG Bestiario] v0.31: Demolicion salvaje de v0.30 recuperada.");
+            }
+        }
+
+        private static bool RecoverLegacyDemolisher()
+        {
+            bool changed = false;
+            foreach (Dictionary<string, BestiaryFamilyCount> families in Players.Values)
+            {
+                BestiaryFamilyCount infected;
+                if (!families.TryGetValue("bsg_infected", out infected)) continue;
+                BestiarySpeciesCount old;
+                if (!infected.Species.TryGetValue("EntityZombieCopRebirth", out old)) continue;
+                if (old.Kills != 1 || string.IsNullOrEmpty(old.DisplayName) ||
+                    old.DisplayName.IndexOf("demolici", StringComparison.OrdinalIgnoreCase) < 0)
+                    continue;
+                string target = old.DisplayName.IndexOf("salvaje", StringComparison.OrdinalIgnoreCase) >= 0
+                    ? "zombieDemolitionFeral" : "zombieDemolition";
+                BestiaryFamilyCount demos;
+                if (!families.TryGetValue("bsg_demolisher", out demos))
+                {
+                    demos = new BestiaryFamilyCount { Id = "bsg_demolisher" };
+                    families[demos.Id] = demos;
+                }
+                if (demos.Kills < int.MaxValue) demos.Kills++;
+                BestiarySpeciesCount found;
+                if (!demos.Species.TryGetValue(target, out found))
+                {
+                    found = new BestiarySpeciesCount { ClassName = target, DisplayName = old.DisplayName };
+                    demos.Species[target] = found;
+                }
+                if (found.Kills < int.MaxValue) found.Kills++;
+                // Mantener exactamente el total anterior de Infectados.
+                infected.Species.Remove("EntityZombieCopRebirth");
+                BestiarySpeciesCount previous;
+                if (!infected.Species.TryGetValue(target, out previous))
+                    infected.Species[target] = new BestiarySpeciesCount {
+                        ClassName = target, DisplayName = old.DisplayName, Kills = 1 };
+                else if (previous.Kills < int.MaxValue) previous.Kills++;
+                changed = true;
+            }
+            return changed;
         }
 
         private static int ClampCount(string raw)
@@ -228,7 +280,7 @@ namespace BSGBestiary
             }
             catch (Exception ex)
             {
-                Log.Error("[BSG Bestiario] Error en EntityKilled v0.25: " + ex);
+                Log.Error("[BSG Bestiario] Error en EntityKilled v0.31: " + ex);
             }
         }
 
@@ -255,7 +307,7 @@ namespace BSGBestiary
             if (string.IsNullOrEmpty(path)) return false;
             try
             {
-                XElement root = new XElement("bsgKills", new XAttribute("schema", "1"));
+                XElement root = new XElement("bsgKills", new XAttribute("schema", "2"));
                 foreach (KeyValuePair<string, Dictionary<string, BestiaryFamilyCount>> p in Players)
                 {
                     XElement player = new XElement("player", new XAttribute("name", p.Key));
@@ -322,34 +374,44 @@ namespace BSGBestiary
 
         private static string ResolveClassName(EntityAlive victim)
         {
+            // Rebirth comparte el CLR EntityZombieCopRebirth entre demos,
+            // policias y kamikazes. Solo el nombre XML identifica a cada uno.
             try
             {
-                Type entityType = victim.GetType();
-                object classId = null;
-                for (Type t = entityType; t != null && classId == null; t = t.BaseType)
-                    classId = GetMember(t, victim, "entityClass", false);
+                EntityClass info = victim.EntityClass;
+                if (info != null && !string.IsNullOrEmpty(info.entityClassName))
+                    return info.entityClassName.Trim();
+            }
+            catch (Exception ex)
+            {
+                if (LoggedClassResolveFailures < 8)
+                    Log.Out("[BSG Bestiario] EntityClass no disponible: " + ex.Message);
+            }
+            try
+            {
+                int id = victim.entityClass;
                 object all = GetMember(typeof(EntityClass), null, "list", true);
-                if (classId != null && all != null)
+                object entry = null;
+                Array arr = all as Array;
+                if (arr != null && id >= 0 && id < arr.Length) entry = arr.GetValue(id);
+                IDictionary dic = all as IDictionary;
+                if (dic != null && dic.Contains(id)) entry = dic[id];
+                if (entry != null)
                 {
-                    int id = Convert.ToInt32(classId, CultureInfo.InvariantCulture);
-                    object entry = null;
-                    Array arr = all as Array;
-                    if (arr != null && id >= 0 && id < arr.Length) entry = arr.GetValue(id);
-                    IDictionary dic = all as IDictionary;
-                    if (dic != null && dic.Contains(id)) entry = dic[id];
-                    if (entry != null)
-                    {
-                        object name = GetMember(entry.GetType(), entry, "entityClassName", false);
-                        if (name != null && !string.IsNullOrEmpty(name.ToString()))
-                            return name.ToString();
-                    }
+                    object name = GetMember(entry.GetType(), entry, "entityClassName", false);
+                    if (name != null && !string.IsNullOrEmpty(name.ToString()))
+                        return name.ToString().Trim();
                 }
             }
             catch (Exception ex)
             {
-                Log.Out("[BSG Bestiario] Aviso al resolver clase: " + ex.Message);
+                if (LoggedClassResolveFailures < 8)
+                    Log.Out("[BSG Bestiario] EntityClass por ID no disponible: " + ex.Message);
             }
-            return victim.GetType().Name;
+            if (LoggedClassResolveFailures++ < 15)
+                Log.Out("[BSG Bestiario] SIN ID XML: entityClass=" + victim.entityClass +
+                        " | CLR=" + victim.GetType().Name + " | no se registra por seguridad");
+            return string.Empty;
         }
 
         private static string ResolveDisplayName(EntityAlive victim, string fallback)

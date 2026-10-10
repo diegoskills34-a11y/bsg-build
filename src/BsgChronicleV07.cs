@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v030click");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v031xmlclass");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.30 Bestiario: XUiC_SimpleButton.OnPressed conectado; no se altera posicion ni apariencia.");
+                Log.Out("[BSG Chronicle] v0.31 Bestiario: deteccion XML de entidades Rebirth y migracion de demo.");
             }
             catch (Exception ex)
             {

@@ -111,6 +111,14 @@ def verify_source():
          ".bsg_antes_de_reparar.bak" in chronicle)
     test("15-family catalog populated from editable XML",
          "public static List<BestiaryFamilyDefinition> GetFamilies()" in chronicle)
+    test("XML class names used instead of CLR names",
+         "victim.EntityClass" in expansion and
+         "info.entityClassName" in expansion and
+         "return victim.GetType().Name;" not in expansion)
+    test("conservative migration of old one-kill demolition",
+         "RecoverLegacyDemolisher()" in expansion and
+         "old.Kills != 1" in expansion and
+         'new XAttribute("schema", "2")' in expansion)
     test("no direct unsupported RemoveBuff calls",
          ".Buffs.RemoveBuff(" not in chronicle)
 
