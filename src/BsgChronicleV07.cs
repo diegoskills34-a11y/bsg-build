@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v032soldiers");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v033masteries");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.32 Bestiario: familia Soldados infectados, 16 familias y recuperacion de bajas antiguas.");
+                Log.Out("[BSG Chronicle] v0.33: maestrias 10/20/25 daño, 0/5/10 desmembramiento, prestigio sin mejoras.");
             }
             catch (Exception ex)
             {
@@ -92,6 +92,7 @@ namespace BSGBestiary
                 }
 
                 RepairBadTitleTags(path);
+                EnsureMasteryTierMetadata(path);
                 XDocument doc = XDocument.Load(path);
                 XElement root = doc.Root;
                 if (root == null) return;
@@ -172,6 +173,57 @@ namespace BSGBestiary
             return a == null ? string.Empty : a.Value;
         }
 
+        // Tres rangos efectivos y prestigio a partir del cuarto titulo.
+        // No se cambian textos, categoria, kill_entity ni thresholds.
+        private static void EnsureMasteryTierMetadata(string path)
+        {
+            XDocument doc = XDocument.Load(path);
+            if (doc.Root == null) return;
+            bool dirty = false;
+            int configured = 0;
+            foreach (XElement category in doc.Root.Elements("category"))
+            {
+                string id = Attr(category, "id");
+                if (string.Equals(id, "bsg_test", StringComparison.OrdinalIgnoreCase))
+                {
+                    foreach (XElement tier in category.Elements("tier"))
+                        foreach (string key in new string[] { "reward_buff", "reward_damage_pct", "reward_dismember_pct" })
+                            if (tier.Attribute(key) != null) { tier.SetAttributeValue(key, null); dirty = true; }
+                    continue;
+                }
+                if (!id.StartsWith("bsg_", StringComparison.OrdinalIgnoreCase)) continue;
+                List<XElement> tiers = new List<XElement>(category.Elements("tier"));
+                tiers.Sort(delegate(XElement a, XElement b) {
+                    int x, y;
+                    int.TryParse(Attr(a, "threshold"), out x);
+                    int.TryParse(Attr(b, "threshold"), out y);
+                    return x.CompareTo(y);
+                });
+                if (tiers.Count < 3) continue;
+                for (int i = 0; i < tiers.Count; i++)
+                {
+                    int t = Math.Min(i, 2);
+                    string buff = "buffBSG_" + id.Substring(4) + "_T" + (t + 1);
+                    string dmg = new string[] { "10", "20", "25" }[t];
+                    string dis = new string[] { "0", "5", "10" }[t];
+                    if (Attr(tiers[i], "reward_buff") != buff) { tiers[i].SetAttributeValue("reward_buff", buff); dirty = true; }
+                    if (Attr(tiers[i], "reward_damage_pct") != dmg) { tiers[i].SetAttributeValue("reward_damage_pct", dmg); dirty = true; }
+                    if (Attr(tiers[i], "reward_dismember_pct") != dis) { tiers[i].SetAttributeValue("reward_dismember_pct", dis); dirty = true; }
+                }
+                configured++;
+            }
+            if (!dirty) return;
+            string backup = path + ".bsg_before_masteries_v033.bak";
+            if (!File.Exists(backup)) File.Copy(path, backup);
+            string temp = path + ".bsg_masteries.tmp";
+            doc.Save(temp);
+            XDocument.Load(temp);
+            File.Copy(temp, path, true);
+            File.Delete(temp);
+            Log.Out("[BSG Bestiario] Maestrias v0.33: " + configured +
+                " familias con recompensas; titulos/requisitos preservados. Backup: " + backup);
+        }
+
         // Valida que cada recompensa referenciada por playertitles.xml exista
         // realmente en el XML de buffs del mod, sin modificar recompensas.
         private static void AuditRewardBuffs(string modDirectory)
@@ -248,7 +300,8 @@ namespace BSGBestiary
                         foreach (XElement effect in candidate.Descendants("passive_effect"))
                         {
                             string effectName = Attr(effect, "name");
-                            if (string.Equals(effectName, "DamageModifier", StringComparison.OrdinalIgnoreCase) ||
+                            if (string.Equals(effectName, "EntityDamage", StringComparison.OrdinalIgnoreCase) ||
+                                string.Equals(effectName, "DamageModifier", StringComparison.OrdinalIgnoreCase) ||
                                 string.Equals(effectName, "DismemberChance", StringComparison.OrdinalIgnoreCase))
                             {
                                 hasRewardEffect = true;
