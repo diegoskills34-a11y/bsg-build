@@ -132,6 +132,36 @@ def verify_source():
              cat.get("id") == "bsg_soldiers" and
              cat.get("kill_entity") == "zombieSoldier" and
              len(titles) == 4 and len(set(titles)) == 4)
+    test("automatic tier metadata upgrade preserves titles and backs up existing XML",
+         "EnsureMasteryTierMetadata(path);" in chronicle and
+         ".bsg_before_masteries_v033.bak" in chronicle and
+         "Math.Min(i, 2)" in chronicle and
+         "buffBSG_" in chronicle)
+    buffconfig = ROOT / "assets/BSG_Masteries_Config/buffs.xml"
+    tagsconfig = ROOT / "assets/zzzzzzzz_BSG_Masteries_Tags/Config/entityclasses.xml"
+    for config in (buffconfig, tagsconfig):
+        test("mastery XML exists: " + config.name, config.is_file())
+        if config.is_file():
+            validate_xml(config)
+    if buffconfig.is_file() and tagsconfig.is_file():
+        b = ET.parse(buffconfig).getroot()
+        e = ET.parse(tagsconfig).getroot()
+        buffs = b.findall(".//buff")
+        test("48 distinct family/rank mastery buffs", len(buffs) == 48 and
+             len({x.get("name") for x in buffs}) == 48)
+        test("mastery includes 10/20/25 damage and 5/10 dismember",
+             {x.get("value") for x in b.findall(".//passive_effect[@name='EntityDamage']")} == {"0.10","0.20","0.25"} and
+             {x.get("value") for x in b.findall(".//passive_effect[@name='DismemberChance']")} == {"0.05","0.10"})
+        tags = e.findall("append")
+        test("48 disjoint XML class target tags", len(tags) == 48 and
+             len({x.text for x in tags}) == 48)
+        test("target tags assigned to existing entity Tags properties",
+             all(x.get("xpath", "").endswith("/property[@name='Tags']/@value") for x in tags))
+        test("buff targets carry exact signature requirement",
+             all(g.find("requirement[@name='EntityTagCompare'][@target='other']") is not None
+                 for g in b.findall(".//effect_group")))
+        test("overlap exclusivity uses NotHasBuff",
+             len(b.findall(".//requirement[@name='NotHasBuff']")) >= 30)
     test("no direct unsupported RemoveBuff calls",
          ".Buffs.RemoveBuff(" not in chronicle)
 
@@ -144,6 +174,9 @@ def verify_package(path):
             names = [n.replace("\\", "/") for n in z.namelist()]
             required = [
                 "0_BSG_Bestiario/bsg_BestiaryChronicle.dll",
+                "0_BSG_Bestiario/Config/buffs.xml",
+                "zzzzzzzz_BSG_Masteries_Tags/ModInfo.xml",
+                "zzzzzzzz_BSG_Masteries_Tags/Config/entityclasses.xml",
                 "1_BSG_Bestiario_UI/Config/XUi/windows.xml",
                 "1_BSG_Bestiario_UI/ModInfo.xml",
             ]
