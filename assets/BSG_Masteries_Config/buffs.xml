@@ -1,0 +1,2920 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+  <append xpath="/buffs">
+    <!-- Three permanent tiers; effect groups are mutually exclusive by target and by strongest unlocked buff. -->
+    <buff name="buffBSG_infected_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="infected_1_bsgTargetSig01">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig01"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig07">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig07"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig08">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig08"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig09">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig09"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig10">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig10"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig11">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig11"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig12">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig12"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig13">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig13"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig14">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig14"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig15">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig15"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig16">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig16"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig17">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig17"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig18">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig18"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig27">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig27"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig28">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig28"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig29">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig29"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig30">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig30"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig31">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig31"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig32">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig32"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig33">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig33"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig34">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig34"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig35">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig35"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig36">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig36"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig37">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig37"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig38">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig38"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig39">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig39"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig40">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig40"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig41">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig41"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig42">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig42"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig43">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig43"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig44">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig44"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig45">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig45"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig46">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig46"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig47">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig47"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_1_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_infected_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="infected_2_bsgTargetSig01">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig01"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig07">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig07"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig08">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig08"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig09">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig09"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig10">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig10"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig11">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig11"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig12">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig12"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig13">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig13"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig14">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig14"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig15">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig15"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig16">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig16"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig17">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig17"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig18">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig18"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig27">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig27"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig28">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig28"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig29">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig29"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig30">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig30"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig31">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig31"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig32">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig32"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig33">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig33"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig34">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig34"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig35">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig35"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig36">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig36"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig37">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig37"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig38">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig38"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig39">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig39"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig40">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig40"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig41">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig41"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig42">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig42"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig43">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig43"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig44">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig44"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig45">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig45"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig46">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig46"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig47">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig47"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="infected_2_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_infected_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="infected_3_bsgTargetSig01">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig01"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig07">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig07"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig08">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig08"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig09">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig09"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig10">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig10"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig11">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig11"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig12">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig12"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig13">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig13"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig14">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig14"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig15">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig15"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig16">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig16"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig17">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig17"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig18">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig18"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig27">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig27"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig28">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig28"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig29">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig29"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig30">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig30"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig31">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig31"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig32">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig32"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig33">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig33"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig34">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig34"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig35">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig35"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig36">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig36"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig37">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig37"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig38">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig38"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig39">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig39"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig40">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig40"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig41">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig41"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig42">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig42"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig43">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig43"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig44">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig44"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig45">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig45"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig46">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig46"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig47">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig47"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="infected_3_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_demolisher_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="demolisher_1_bsgTargetSig11">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig11"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="demolisher_1_bsgTargetSig33">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig33"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="demolisher_1_bsgTargetSig34">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig34"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_demolisher_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="demolisher_2_bsgTargetSig11">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig11"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="demolisher_2_bsgTargetSig33">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig33"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="demolisher_2_bsgTargetSig34">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig34"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_demolisher_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="demolisher_3_bsgTargetSig11">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig11"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="demolisher_3_bsgTargetSig33">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig33"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="demolisher_3_bsgTargetSig34">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig34"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_screamer_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="screamer_1_bsgTargetSig16">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig16"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="screamer_1_bsgTargetSig42">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig42"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="screamer_1_bsgTargetSig43">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig43"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_screamer_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="screamer_2_bsgTargetSig16">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig16"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="screamer_2_bsgTargetSig42">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig42"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="screamer_2_bsgTargetSig43">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig43"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_screamer_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="screamer_3_bsgTargetSig16">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig16"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="screamer_3_bsgTargetSig42">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig42"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="screamer_3_bsgTargetSig43">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig43"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_cop_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="cop_1_bsgTargetSig10">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig10"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="cop_1_bsgTargetSig31">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig31"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="cop_1_bsgTargetSig32">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig32"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_cop_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="cop_2_bsgTargetSig10">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig10"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="cop_2_bsgTargetSig31">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig31"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="cop_2_bsgTargetSig32">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig32"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_cop_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="cop_3_bsgTargetSig10">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig10"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="cop_3_bsgTargetSig31">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig31"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="cop_3_bsgTargetSig32">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig32"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_biker_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="biker_1_bsgTargetSig08">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig08"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="biker_1_bsgTargetSig29">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig29"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="biker_1_bsgTargetSig30">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig30"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_biker_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="biker_2_bsgTargetSig08">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig08"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="biker_2_bsgTargetSig29">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig29"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="biker_2_bsgTargetSig30">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig30"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_biker_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="biker_3_bsgTargetSig08">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig08"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="biker_3_bsgTargetSig29">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig29"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="biker_3_bsgTargetSig30">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig30"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_nurse_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="nurse_1_bsgTargetSig14">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig14"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="nurse_1_bsgTargetSig37">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig37"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="nurse_1_bsgTargetSig38">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig38"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_nurse_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="nurse_2_bsgTargetSig14">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig14"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="nurse_2_bsgTargetSig37">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig37"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="nurse_2_bsgTargetSig38">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig38"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_nurse_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="nurse_3_bsgTargetSig14">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig14"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="nurse_3_bsgTargetSig37">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig37"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="nurse_3_bsgTargetSig38">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig38"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_dogs_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="dogs_1_bsgTargetSig12">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig12"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="dogs_1_bsgTargetSig35">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig35"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="dogs_1_bsgTargetSig36">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig36"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_dogs_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="dogs_2_bsgTargetSig12">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig12"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="dogs_2_bsgTargetSig35">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig35"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="dogs_2_bsgTargetSig36">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig36"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_dogs_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="dogs_3_bsgTargetSig12">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig12"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="dogs_3_bsgTargetSig35">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig35"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="dogs_3_bsgTargetSig36">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig36"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_bears_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="bears_1_bsgTargetSig07">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig07"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="bears_1_bsgTargetSig27">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig27"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="bears_1_bsgTargetSig28">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig28"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_bears_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="bears_2_bsgTargetSig07">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig07"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="bears_2_bsgTargetSig27">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig27"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="bears_2_bsgTargetSig28">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig28"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_bears_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="bears_3_bsgTargetSig07">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig07"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="bears_3_bsgTargetSig27">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig27"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="bears_3_bsgTargetSig28">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig28"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_radiated_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="radiated_1_bsgTargetSig04">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig04"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig15">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig15"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig19">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig19"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig20">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig20"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig21">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig21"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig22">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig22"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig27">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig27"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig29">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig29"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig31">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig31"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig33">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig33"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig35">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig35"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig37">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig37"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig39">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig39"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig40">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig40"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig41">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig41"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig42">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig42"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_1_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_radiated_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="radiated_2_bsgTargetSig04">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig04"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig15">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig15"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig19">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig19"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig20">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig20"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig21">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig21"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig22">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig22"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig27">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig27"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig29">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig29"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig31">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig31"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig33">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig33"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig35">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig35"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig37">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig37"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig39">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig39"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig40">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig40"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig41">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig41"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig42">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig42"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="radiated_2_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_radiated_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="radiated_3_bsgTargetSig04">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig04"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig15">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig15"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig19">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig19"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig20">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig20"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig21">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig21"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig22">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig22"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig27">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig27"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig29">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig29"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig31">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig31"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig33">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig33"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig35">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig35"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig37">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig37"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig39">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig39"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig40">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig40"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig41">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig41"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig42">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig42"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="radiated_3_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_tainted_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="tainted_1_bsgTargetSig06">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig06"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig18">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig18"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig22">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig22"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig24">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig24"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig25">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig25"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig26">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig26"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig28">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig28"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig30">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig30"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig32">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig32"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig34">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig34"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig36">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig36"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig38">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig38"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig43">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig43"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig44">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig44"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig45">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig45"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig46">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig46"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_1_bsgTargetSig47">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig47"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_tainted_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="tainted_2_bsgTargetSig06">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig06"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig18">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig18"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig22">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig22"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig24">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig24"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig25">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig25"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig26">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig26"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig28">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig28"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig30">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig30"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig32">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig32"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig34">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig34"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig36">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig36"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig38">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig38"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig43">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig43"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig44">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig44"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig45">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig45"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig46">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig46"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="tainted_2_bsgTargetSig47">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig47"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_tainted_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="tainted_3_bsgTargetSig06">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig06"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig18">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig18"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig22">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig22"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig24">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig24"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig25">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig25"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig26">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig26"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig28">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig28"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_bears_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig30">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig30"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_biker_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig32">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig32"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_cop_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig34">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig34"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_demolisher_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig36">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig36"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_dogs_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig38">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig38"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_nurse_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig43">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig43"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_screamer_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig44">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig44"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig45">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig45"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig46">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig46"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="tainted_3_bsgTargetSig47">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig47"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_giants_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="giants_1_bsgTargetSig13">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig13"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="giants_1_bsgTargetSig40">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig40"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="giants_1_bsgTargetSig45">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig45"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_giants_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="giants_2_bsgTargetSig13">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig13"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="giants_2_bsgTargetSig40">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig40"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="giants_2_bsgTargetSig45">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig45"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_giants_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_giants_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="giants_3_bsgTargetSig13">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig13"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="giants_3_bsgTargetSig40">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig40"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="giants_3_bsgTargetSig45">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig45"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_brutes_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="brutes_1_bsgTargetSig09">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig09"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="brutes_1_bsgTargetSig39">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig39"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="brutes_1_bsgTargetSig44">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig44"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_brutes_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="brutes_2_bsgTargetSig09">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig09"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="brutes_2_bsgTargetSig39">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig39"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="brutes_2_bsgTargetSig44">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig44"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_brutes_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_brutes_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="brutes_3_bsgTargetSig09">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig09"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="brutes_3_bsgTargetSig39">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig39"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="brutes_3_bsgTargetSig44">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig44"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_kamikaze_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="kamikaze_1_bsgTargetSig02">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig02"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="kamikaze_1_bsgTargetSig19">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig19"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="kamikaze_1_bsgTargetSig24">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig24"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_kamikaze_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="kamikaze_2_bsgTargetSig02">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig02"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="kamikaze_2_bsgTargetSig19">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig19"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="kamikaze_2_bsgTargetSig24">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig24"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_kamikaze_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_kamikaze_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="kamikaze_3_bsgTargetSig02">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig02"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="kamikaze_3_bsgTargetSig19">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig19"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="kamikaze_3_bsgTargetSig24">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig24"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_seekers_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="seekers_1_bsgTargetSig05">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig05"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="seekers_1_bsgTargetSig21">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig21"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="seekers_1_bsgTargetSig23">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig23"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="seekers_1_bsgTargetSig26">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig26"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_seekers_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="seekers_2_bsgTargetSig05">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig05"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="seekers_2_bsgTargetSig21">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig21"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="seekers_2_bsgTargetSig23">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig23"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="seekers_2_bsgTargetSig26">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig26"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_seekers_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="seekers_3_bsgTargetSig05">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig05"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="seekers_3_bsgTargetSig21">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig21"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="seekers_3_bsgTargetSig23">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig23"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="seekers_3_bsgTargetSig26">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig26"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_named_bosses_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="named_bosses_1_bsgTargetSig03">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig03"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_1_bsgTargetSig20">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig20"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_1_bsgTargetSig23">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig23"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_1_bsgTargetSig25">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig25"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_1_bsgTargetSig46">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig46"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_1_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_named_bosses_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="named_bosses_2_bsgTargetSig03">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig03"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="named_bosses_2_bsgTargetSig20">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig20"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="named_bosses_2_bsgTargetSig23">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig23"/>
+        <requirement name="NotHasBuff" buff="buffBSG_seekers_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="named_bosses_2_bsgTargetSig25">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig25"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="named_bosses_2_bsgTargetSig46">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig46"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="named_bosses_2_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_named_bosses_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="named_bosses_3_bsgTargetSig03">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig03"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_3_bsgTargetSig20">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig20"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_3_bsgTargetSig23">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig23"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_3_bsgTargetSig25">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig25"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_3_bsgTargetSig46">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig46"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="named_bosses_3_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_soldiers_T1" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="soldiers_1_bsgTargetSig17">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig17"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="soldiers_1_bsgTargetSig41">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig41"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="soldiers_1_bsgTargetSig47">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig47"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="soldiers_1_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T1"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.10"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_soldiers_T2" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="soldiers_2_bsgTargetSig17">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig17"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="soldiers_2_bsgTargetSig41">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig41"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="soldiers_2_bsgTargetSig47">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig47"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_tainted_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+      <effect_group name="soldiers_2_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T2"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_soldiers_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.20"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.05"/>
+      </effect_group>
+    </buff>
+    <buff name="buffBSG_soldiers_T3" hidden="true" remove_on_death="false">
+      <stack_type value="ignore"/>
+      <duration value="0"/>
+      <effect_group name="soldiers_3_bsgTargetSig17">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig17"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="soldiers_3_bsgTargetSig41">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig41"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="soldiers_3_bsgTargetSig47">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig47"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+      <effect_group name="soldiers_3_bsgTargetSig48">
+        <requirement name="EntityTagCompare" target="other" tags="bsgTargetSig48"/>
+        <requirement name="NotHasBuff" buff="buffBSG_infected_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_radiated_T3"/>
+        <requirement name="NotHasBuff" buff="buffBSG_named_bosses_T3"/>
+        <passive_effect name="EntityDamage" operation="perc_add" value="0.25"/>
+        <passive_effect name="DismemberChance" operation="base_add" value="0.10"/>
+      </effect_group>
+    </buff>
+  </append>
+</configs>

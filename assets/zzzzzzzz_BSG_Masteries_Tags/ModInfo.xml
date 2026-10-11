@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+  <Name value="BSG_Masteries_Tags"/>
+  <DisplayName value="BSG Masteries: Late Rebirth Entity Tags"/>
+  <Description value="Late-load family identity tags for mastery bonuses, v2.6"/>
+  <Author value="BSG"/>
+  <Version value="0.33.0"/>
+</xml>
