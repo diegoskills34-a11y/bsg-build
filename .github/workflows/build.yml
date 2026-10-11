@@ -73,7 +73,7 @@ jobs:
             "La actualizacion NO incluye PlayerTitles.dll. Para uso standalone mantener el paquete completo anterior.",
             "PENDIENTE: comprobar efectos de daño y desmembramiento dentro de la partida; CI no lo prueba."
           ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.33.txt" -Encoding UTF8
-          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.33_MAESTRIAS_MAX_EXCLUSIVAS.zip" -Force
+          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI","package/zzzzzzzz_BSG_Masteries_Tags" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.33_MAESTRIAS_MAX_EXCLUSIVAS.zip" -Force
 
       - name: Verify packaged ZIP against Vanilla v2.6
         shell: powershell
@@ -100,7 +100,7 @@ jobs:
             workflow_run_id = [long]$env:BSG_RUN_ID
             artifact_id = [long]$env:BSG_ARTIFACT_ID
             commit = $env:BSG_SOURCE_SHA
-            package_type = "update_dll_only"
+            package_type = "update_dll_buffs_and_late_tags"
           } | ConvertTo-Json | Set-Content -Path "build-output/latest-artifact.json" -Encoding UTF8
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
