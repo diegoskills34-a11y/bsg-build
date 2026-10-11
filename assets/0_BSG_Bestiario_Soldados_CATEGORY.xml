@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Insertar en Config/playertitles.xml antes de </playertitles>.
+     Cada zombieSoldier* del juego cuenta tambien en Infectados,
+     y Radiated/Tainted si corresponde. -->
+<category kill_entity="zombieSoldier" id="bsg_soldiers" name="Soldados infectados">
+  <tier threshold="50" text="[ROMPEFILAS]" />
+  <tier threshold="250" text="[ASALTA CUARTELES]" />
+  <tier threshold="1000" text="[CAZABATALLONES]" />
+  <tier threshold="2500" text="[GENERAL DEL APOCALIPSIS]" />
+</category>

@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v031xmlclass");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v032soldiers");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.31 Bestiario: deteccion XML de entidades Rebirth y migracion de demo.");
+                Log.Out("[BSG Chronicle] v0.32 Bestiario: familia Soldados infectados, 16 familias y recuperacion de bajas antiguas.");
             }
             catch (Exception ex)
             {
@@ -130,9 +130,9 @@ namespace BSGBestiary
 
                 Log.Out("[BSG Chronicle] Catalogo cargado: " + ByText.Count + " titulos.");
                 List<BestiaryFamilyDefinition> familias = GetFamilies();
-                Log.Out("[BSG Bestiario] DIAG: familias cargadas=" + familias.Count + " (esperado=15).");
-                if (familias.Count != 15)
-                    Log.Out("[BSG Bestiario] AVISO: cantidad de familias distinta de 15, revisar Config/playertitles.xml.");
+                Log.Out("[BSG Bestiario] DIAG: familias cargadas=" + familias.Count + " (XML dinamico).");
+                if (familias.Count < 15)
+                    Log.Out("[BSG Bestiario] AVISO: faltan familias respecto del catalogo base: " + familias.Count);
                 foreach (BestiaryFamilyDefinition familia in familias)
                 {
                     if (string.IsNullOrEmpty(familia.MatchClass))

@@ -109,7 +109,7 @@ def verify_source():
          "boundSimple.OnPressed += HandlePress;" in chronicle)
     test("XML repair keeps old title data in backup",
          ".bsg_antes_de_reparar.bak" in chronicle)
-    test("15-family catalog populated from editable XML",
+    test("family catalog dynamically populated from editable XML",
          "public static List<BestiaryFamilyDefinition> GetFamilies()" in chronicle)
     test("XML class names used instead of CLR names",
          "victim.EntityClass" in expansion and
@@ -119,6 +119,19 @@ def verify_source():
          "RecoverLegacyDemolisher()" in expansion and
          "old.Kills != 1" in expansion and
          'new XAttribute("schema", "2")' in expansion)
+    test("soldier family backfill from saved XML species", 
+         'RecoverSoldierKills()' in expansion and
+         'StartsWith("zombieSoldier"' in expansion and
+         'new XAttribute("schema", "3")' in expansion)
+    soldier_category = ROOT / "assets/0_BSG_Bestiario_Soldados_CATEGORY.xml"
+    test("soldier category XML template present", soldier_category.is_file())
+    if soldier_category.is_file():
+        cat = ET.parse(soldier_category).getroot()
+        titles = [t.get("text") for t in cat.findall("tier")]
+        test("soldier category matches all zombieSoldier variants",
+             cat.get("id") == "bsg_soldiers" and
+             cat.get("kill_entity") == "zombieSoldier" and
+             len(titles) == 4 and len(set(titles)) == 4)
     test("no direct unsupported RemoveBuff calls",
          ".Buffs.RemoveBuff(" not in chronicle)
 

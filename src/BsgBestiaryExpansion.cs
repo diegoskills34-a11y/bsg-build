@@ -135,6 +135,52 @@ namespace BSGBestiary
                 NextSaveUtc = DateTime.UtcNow;
                 Log.Out("[BSG Bestiario] v0.31: Demolicion salvaje de v0.30 recuperada.");
             }
+            // Cuando se añade una familia nueva, aprovechar las bajas que el
+            // propio Bestiario ya registro por especie XML en bsg_infected.
+            // Nunca modificar PlayerTitles ni inventar bajas previas a v0.21.
+            if (schema < 3)
+            {
+                int restored = RecoverSoldierKills();
+                if (restored > 0)
+                {
+                    Dirty = true;
+                    NextSaveUtc = DateTime.UtcNow;
+                    Log.Out("[BSG Bestiario] v0.32: " + restored +
+                        " baja(s) de soldados restauradas desde Infectados.");
+                }
+            }
+        }
+
+        private static int RecoverSoldierKills()
+        {
+            int restored = 0;
+            foreach (Dictionary<string, BestiaryFamilyCount> families in Players.Values)
+            {
+                // Nunca sumar dos veces al actualizar o reiniciar.
+                if (families.ContainsKey("bsg_soldiers")) continue;
+                BestiaryFamilyCount infected;
+                if (!families.TryGetValue("bsg_infected", out infected)) continue;
+                BestiaryFamilyCount soldiers = new BestiaryFamilyCount { Id = "bsg_soldiers" };
+                foreach (BestiarySpeciesCount species in infected.Species.Values)
+                {
+                    if (string.IsNullOrEmpty(species.ClassName) ||
+                        !species.ClassName.StartsWith("zombieSoldier",
+                            StringComparison.OrdinalIgnoreCase))
+                        continue;
+                    if (species.Kills <= 0) continue;
+                    soldiers.Species[species.ClassName] = new BestiarySpeciesCount {
+                        ClassName = species.ClassName,
+                        DisplayName = species.DisplayName,
+                        Kills = species.Kills
+                    };
+                    soldiers.Kills = (int)Math.Min((long)int.MaxValue,
+                        (long)soldiers.Kills + species.Kills);
+                }
+                if (soldiers.Kills == 0) continue;
+                families[soldiers.Id] = soldiers;
+                restored += soldiers.Kills;
+            }
+            return restored;
         }
 
         private static bool RecoverLegacyDemolisher()
@@ -307,7 +353,7 @@ namespace BSGBestiary
             if (string.IsNullOrEmpty(path)) return false;
             try
             {
-                XElement root = new XElement("bsgKills", new XAttribute("schema", "2"));
+                XElement root = new XElement("bsgKills", new XAttribute("schema", "3"));
                 foreach (KeyValuePair<string, Dictionary<string, BestiaryFamilyCount>> p in Players)
                 {
                     XElement player = new XElement("player", new XAttribute("name", p.Key));
