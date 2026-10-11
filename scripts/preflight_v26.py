@@ -118,7 +118,7 @@ def verify_source():
     test("conservative migration of old one-kill demolition",
          "RecoverLegacyDemolisher()" in expansion and
          "old.Kills != 1" in expansion and
-         'new XAttribute("schema", "2")' in expansion)
+         'new XAttribute("schema", "3")' in expansion)
     test("soldier family backfill from saved XML species", 
          'RecoverSoldierKills()' in expansion and
          'StartsWith("zombieSoldier"' in expansion and
