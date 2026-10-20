@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml>
-  <Name value="BSG_Bestiario_UI_Button" />
-  <DisplayName value="BSG Bestiario - Boton B de Personaje" />
+  <Name value="DLG_Bestiario_UI_Button" />
+  <DisplayName value="DLG - Bestiario / Títulos" />
   <Description value="Boton del Bestiario al lado de Titulos, Vanilla/Rebirth 2.6." />
-  <Author value="BSG" />
-  <Version value="0.35.0" />
+  <Author value="Dialoguer &amp; ChatGPT" />
+  <Version value="0.36.0" />
 </xml>

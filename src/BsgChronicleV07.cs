@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v035bestiaryui");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v036dlgstyle");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.35: interfaz de bestiario MMO, cierre automatico y tooltips de titulos.");
+                Log.Out("[BSG Chronicle] v0.36: identidad visual DLG, paleta unificada y tooltips de PlayerTitles.");
             }
             catch (Exception ex)
             {
@@ -768,8 +768,8 @@ namespace BSGBestiary
                 return;
             }
 
-            label.Text = entry.Line;
-            label.SetTextImmediately(entry.Line);
+            label.Text = entry.Line.Replace("BSG", "DLG");
+            label.SetTextImmediately(entry.Line.Replace("BSG", "DLG"));
             label.ToolTip = entry.Tooltip;
 
             if (ctrl.ViewComponent != null)
@@ -796,8 +796,8 @@ namespace BSGBestiary
                 if (hasEntry)
                 {
                     ChronicleEntry entry = Entries[i];
-                    label.Text = entry.Line;
-                    label.SetTextImmediately(entry.Line);
+                    label.Text = entry.Line.Replace("BSG", "DLG");
+                    label.SetTextImmediately(entry.Line.Replace("BSG", "DLG"));
                     label.ToolTip = entry.Tooltip;
 
                     if (row != null && row.ViewComponent != null)

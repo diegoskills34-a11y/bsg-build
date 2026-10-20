@@ -210,6 +210,19 @@ def verify_source():
          "BsgMMOBestiaryWindow.Toggle();" in expansion and
          "PlayerTitlesTooltipBridge.Tick();" in chronicle and
          "boundSimple.OnPressed += HandlePress;" in chronicle)
+    test("DLG visual brand replaces the BSG heading, preserves technical ids",
+         'DLG  /  BESTIARIO' in (ROOT / "src/BsgMMOBestiaryWindow.cs").read_text(encoding="utf-8") and
+         'bsg_infected' in expansion)
+    test("new portraits use ScaleToFit instead of cropping",
+         'ScaleMode.ScaleToFit' in (ROOT / "src/BsgMMOBestiaryWindow.cs").read_text(encoding="utf-8"))
+    test("native title tooltip is intercepted after PlayerTitles updates it",
+         'DlgNativeTitleTooltipPatch' in (ROOT / "src/PlayerTitlesTooltipBridge.cs").read_text(encoding="utf-8") and
+         'DecorateNativeTooltip' in (ROOT / "src/PlayerTitlesTooltipBridge.cs").read_text(encoding="utf-8"))
+    xui = validate_xml(ROOT / BUTTON_REL)
+    test("native Titles panel palette unified",
+         xui is not None and
+         len(xui.findall("set")) == 4 and
+         all("ptTitlesPanel" in e.get("xpath", "") for e in xui.findall("set")))
     test("no direct unsupported RemoveBuff calls",
          ".Buffs.RemoveBuff(" not in chronicle)
 
