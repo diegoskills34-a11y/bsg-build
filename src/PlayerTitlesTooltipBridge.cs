@@ -192,7 +192,7 @@ namespace BSGBestiary
     {
         private static IEnumerable<MethodBase> TargetMethods()
         {
-            MethodInfo setter = AccessTools.PropertySetter(typeof(XUiV_ViewComponent), "ToolTip");
+            MethodInfo setter = AccessTools.PropertySetter(typeof(XUiV_Label), "ToolTip");
             if (setter != null)
             {
                 Log.Out("[DLG Títulos] Hook del tooltip XUiV_ViewComponent activo.");
