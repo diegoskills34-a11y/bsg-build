@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using HarmonyLib;
 using System.Text.RegularExpressions;
 
 namespace BSGBestiary
@@ -101,10 +103,25 @@ namespace BSGBestiary
             return preview;
         }
 
+        public static string DecorateNativeTooltip(string native)
+        {
+            if (string.IsNullOrEmpty(native) ||
+                native.IndexOf("Recompensa:", StringComparison.OrdinalIgnoreCase) >= 0)
+                return native;
+            ChronicleTitleInfo info = FromTooltip(native);
+            if (info == null) return native;
+            string detailed = BuildPreview(info, string.Empty);
+            if (native.IndexOf("desbloqueado", StringComparison.OrdinalIgnoreCase) >= 0)
+                detailed += "\nEstado: desbloqueado";
+            else if (native.IndexOf("bloqueado", StringComparison.OrdinalIgnoreCase) >= 0)
+                detailed += "\nEstado: pendiente";
+            return detailed.Replace("BSG", "DLG");
+        }
+
         public static void Tick()
         {
             if (DateTime.UtcNow < nextTick) return;
-            nextTick = DateTime.UtcNow.AddMilliseconds(650);
+            nextTick = DateTime.UtcNow.AddMilliseconds(160);
             try
             {
                 if (GameManager.Instance == null || GameManager.Instance.World == null) return;
@@ -115,12 +132,15 @@ namespace BSGBestiary
                 XUiController frame = xui.GetChildById("CharacterFrameWindow");
                 XUiController panel = frame == null ? null : frame.GetChildById("ptTitlesPanel");
                 if (panel == null) panel = xui.GetChildById("ptTitlesPanel");
+                XUiController list = panel == null ? null : panel.GetChildById("ptListArea");
                 if (panel == null || panel.ViewComponent == null ||
                     !panel.ViewComponent.IsVisible) return;
                 int updated = 0;
                 for (int i = 0; i < 100; i++)
                 {
-                    XUiController row = panel.GetChildById("ptRow" + i);
+                    XUiController row = list == null ? null : list.GetChildById("ptRow" + i);
+                    if (row == null && panel != null) row = panel.GetChildById("ptRow" + i);
+                    if (row == null) row = xui.GetChildById("ptRow" + i);
                     if (row == null || row.ViewComponent == null ||
                         !row.ViewComponent.IsVisible) continue;
                     object view = row.ViewComponent;
@@ -128,28 +148,28 @@ namespace BSGBestiary
                     ChronicleTitleInfo info = ChronicleCatalog.Find(text);
                     if (info == null) info = FromTooltip(row.ViewComponent.ToolTip);
                     if (info == null) continue;
-                    string tooltip = BuildPreview(info, text);
+                    string tooltip = BuildPreview(info, text).Replace("BSG", "DLG");
                     if (!string.Equals(row.ViewComponent.ToolTip, tooltip,
                         StringComparison.Ordinal))
                         row.ViewComponent.ToolTip = tooltip;
                     // Mostrar "/requisito" si la fila desbloqueada solo tiene el nombre.
                     // Si muestra 122/500 no se sobrescribe el contador.
-                    if (string.Equals((text ?? "").Trim(), info.Text,
-                        StringComparison.OrdinalIgnoreCase) && text.Length < 21 &&
-                        info.Threshold > 0)
-                        WriteText(view, text + " /" + info.Threshold);
+                    // PlayerTitles conserva sus claves internas; solo cambiamos
+                    // la cadena visible en títulos históricos de prueba.
+                    if (!string.IsNullOrEmpty(text) && text.Contains("BSG"))
+                        WriteText(view, text.Replace("BSG", "DLG"));
                     updated++;
                 }
                 if (updated > 0 && !loggedRows)
                 {
                     loggedRows = true;
-                    Log.Out("[BSG Titulos] v0.35: " + updated +
+                    Log.Out("[DLG Títulos] v0.36: " + updated +
                         " tooltips de requisitos y recompensa asociados a las filas.");
                 }
                 else if (updated == 0 && !loggedMissing)
                 {
                     loggedMissing = true;
-                    Log.Out("[BSG Titulos] v0.35: ninguna fila identificada; " +
+                    Log.Out("[DLG Títulos] v0.36: ninguna fila identificada; " +
                         "verificar lectura XUiV_ToggleButton.Text en Rebirth.");
                 }
             }
@@ -158,8 +178,42 @@ namespace BSGBestiary
                 if (!loggedMissing)
                 {
                     loggedMissing = true;
-                    Log.Out("[BSG Titulos] v0.35: aviso no fatal al enriquecer filas: " + ex);
+                    Log.Out("[DLG Títulos] v0.36: aviso no fatal al enriquecer filas: " + ex);
                 }
+            }
+        }
+    }
+
+    // PlayerTitles restablece el tooltip nativo. Este hook modifica el
+    // argumento ANTES de que se almacene, en vez de competir cada 650 ms.
+    // Cuando el setter no está disponible, el puente Tick sigue activo.
+    [HarmonyPatch]
+    public static class DlgNativeTitleTooltipPatch
+    {
+        private static IEnumerable<MethodBase> TargetMethods()
+        {
+            MethodInfo setter = AccessTools.PropertySetter(typeof(XUiV_ViewComponent), "ToolTip");
+            if (setter != null)
+            {
+                Log.Out("[DLG Títulos] Hook del tooltip XUiV_ViewComponent activo.");
+                yield return setter;
+            }
+            else
+                Log.Out("[DLG Títulos] No se encontró setter de tooltip; usando puente visual.");
+        }
+
+        [HarmonyPrefix]
+        private static void Prefix(ref string value)
+        {
+            try
+            {
+                if (value == null || value.IndexOf("rango", StringComparison.OrdinalIgnoreCase) < 0)
+                    return;
+                value = PlayerTitlesTooltipBridge.DecorateNativeTooltip(value);
+            }
+            catch (Exception ex)
+            {
+                Log.Out("[DLG Títulos] No se pudo enriquecer tooltip nativo: " + ex.Message);
             }
         }
     }
