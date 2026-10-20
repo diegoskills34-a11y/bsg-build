@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v033masteries");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v034chroniclefix");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.33: maestrias 10/20/25 daño, 0/5/10 desmembramiento, prestigio sin mejoras.");
+                Log.Out("[BSG Chronicle] v0.34: historial persistente de Cronica y recuperacion de maestrias del titulo activo.");
             }
             catch (Exception ex)
             {
@@ -475,15 +475,108 @@ namespace BSGBestiary
         private static readonly List<ChronicleEntry> Entries = new List<ChronicleEntry>();
         private static EntityPlayerLocal LocalPlayer;
         private static DateTime NextUiTickUtc = DateTime.MinValue;
+        private static string LoadedHistoryPath = string.Empty;
+        private static bool historyReadIssue;
+        private static bool historySaveIssue;
+
+        private static void EnsureHistoryLoaded()
+        {
+            string dir = GameIO.GetSaveGameDir();
+            if (string.IsNullOrEmpty(dir)) return;
+            string path = Path.Combine(dir, "bsg_chronicle_history.xml");
+            if (string.Equals(path, LoadedHistoryPath, StringComparison.OrdinalIgnoreCase)) return;
+
+            Entries.Clear();
+            LoadedHistoryPath = path;
+            if (!File.Exists(path)) return;
+            if (TryReadHistory(path)) return;
+            if (TryReadHistory(path + ".bak"))
+                Log.Out("[BSG Chronicle] Historial recuperado de backup: " + path + ".bak");
+        }
+
+        private static bool TryReadHistory(string path)
+        {
+            if (!File.Exists(path)) return false;
+            try
+            {
+                XDocument doc = XDocument.Load(path);
+                if (doc.Root == null || doc.Root.Name.LocalName != "bsgChronicle")
+                    return false;
+                List<ChronicleEntry> loaded = new List<ChronicleEntry>();
+                foreach (XElement element in doc.Root.Elements("entry"))
+                {
+                    string line = (string)element.Attribute("line") ?? string.Empty;
+                    string tooltip = (string)element.Attribute("tooltip") ?? string.Empty;
+                    long ticks;
+                    if (line.Length == 0) continue;
+                    if (!long.TryParse((string)element.Attribute("utcTicks"), out ticks))
+                        ticks = DateTime.UtcNow.AddHours(-1).Ticks;
+                    if (ticks < DateTime.MinValue.Ticks || ticks > DateTime.MaxValue.Ticks)
+                        ticks = DateTime.UtcNow.AddHours(-1).Ticks;
+                    loaded.Add(new ChronicleEntry {
+                        Line = line,
+                        Tooltip = tooltip,
+                        CreatedUtc = new DateTime(ticks, DateTimeKind.Utc)
+                    });
+                    if (loaded.Count >= MaxHistory) break;
+                }
+                Entries.Clear();
+                Entries.AddRange(loaded);
+                Log.Out("[BSG Chronicle] Historial recuperado: " + Entries.Count + " entradas.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (!historyReadIssue)
+                {
+                    historyReadIssue = true;
+                    Log.Error("[BSG Chronicle] Historial invalido: " + ex.Message);
+                }
+                return false;
+            }
+        }
+
+        private static void SaveHistory()
+        {
+            if (string.IsNullOrEmpty(LoadedHistoryPath)) return;
+            try
+            {
+                XElement root = new XElement("bsgChronicle", new XAttribute("version", "1"));
+                foreach (ChronicleEntry e in Entries)
+                    root.Add(new XElement("entry",
+                        new XAttribute("line", e.Line),
+                        new XAttribute("tooltip", e.Tooltip ?? string.Empty),
+                        new XAttribute("utcTicks", e.CreatedUtc.Ticks.ToString())));
+                string tmp = LoadedHistoryPath + ".tmp";
+                new XDocument(root).Save(tmp);
+                if (File.Exists(LoadedHistoryPath))
+                    File.Replace(tmp, LoadedHistoryPath, LoadedHistoryPath + ".bak");
+                else
+                    File.Move(tmp, LoadedHistoryPath);
+            }
+            catch (Exception ex)
+            {
+                if (!historySaveIssue)
+                {
+                    historySaveIssue = true;
+                    Log.Error("[BSG Chronicle] No se pudo guardar el historial: " + ex);
+                }
+            }
+        }
 
         public static void BindLocal(EntityPlayerLocal player)
         {
-            if (player != null) LocalPlayer = player;
+            if (player != null)
+            {
+                LocalPlayer = player;
+                EnsureHistoryLoaded();
+            }
         }
 
         public static void Publish(EntityPlayerLocal localPlayer, string playerName, string title)
         {
             if (string.IsNullOrEmpty(title)) return;
+            EnsureHistoryLoaded();
             if (string.IsNullOrEmpty(playerName)) playerName = "Jugador";
 
             if (localPlayer != null)
@@ -494,9 +587,14 @@ namespace BSGBestiary
             entry.Tooltip = ChronicleCatalog.BuildTooltip(title);
             entry.CreatedUtc = DateTime.UtcNow;
 
+            // Repeticiones de red del mismo desbloqueo no deben duplicar la bitácora.
+            if (Entries.Count > 0 && Entries[0].Line == entry.Line &&
+                (DateTime.UtcNow - Entries[0].CreatedUtc).TotalSeconds < 10)
+                return;
             Entries.Insert(0, entry);
             while (Entries.Count > MaxHistory)
                 Entries.RemoveAt(Entries.Count - 1);
+            SaveHistory();
 
             Log.Out("[BSG Chronicle] CRONICA => " + entry.Line);
             Log.Out("[BSG Chronicle] Tooltip => " + entry.Tooltip.Replace("\n", " | "));
@@ -516,6 +614,7 @@ namespace BSGBestiary
                     GameManager.Instance.World != null)
                     LocalPlayer = GameManager.Instance.World.GetPrimaryPlayer() as EntityPlayerLocal;
                 if (LocalPlayer == null) return;
+                EnsureHistoryLoaded();
                 ApplyUi(false);
             }
             catch (Exception ex)
@@ -676,6 +775,34 @@ namespace BSGBestiary
 
     public static class MasteryState
     {
+        private static DateTime nextActiveSyncUtc = DateTime.MinValue;
+
+        // PlayerTitles puede haber otorgado y equipado un título antes de instalar
+        // esta versión. Recuperar SOLO el título activo comprobable, sin inventar
+        // una nueva notificación de Crónica.
+        public static void SyncNativeActiveTitle(EntityPlayerLocal player)
+        {
+            if (player == null || player.PlayerUI == null || player.PlayerUI.xui == null ||
+                DateTime.UtcNow < nextActiveSyncUtc) return;
+            nextActiveSyncUtc = DateTime.UtcNow.AddSeconds(2);
+            try
+            {
+                XUiController ctrl = player.PlayerUI.xui.GetChildById("ptActiveLabel");
+                XUiV_Label label = ctrl == null ? null : ctrl.ViewComponent as XUiV_Label;
+                if (label == null || string.IsNullOrEmpty(label.Text)) return;
+                ChronicleTitleInfo active = ChronicleCatalog.Find(label.Text);
+                if (active == null || string.IsNullOrEmpty(active.Text)) return;
+                if (HasTitle(player.EntityName, active.Text)) return;
+                Unlock(player.EntityName, active.Text);
+                Log.Out("[BSG Bestiario] SINCRONIZACION: titulo activo confirmado en PlayerTitles => " +
+                    active.Text + ". Recompensa restablecida sin anuncio nuevo.");
+            }
+            catch (Exception ex)
+            {
+                Log.Out("[BSG Bestiario] Aviso en sincronizacion de titulo activo: " + ex.Message);
+            }
+        }
+
         private static readonly Dictionary<string, HashSet<string>> Unlocked =
             new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
         private static string LoadedPath = string.Empty;
@@ -889,7 +1016,10 @@ namespace BSGBestiary
                 NextCheckUtc = DateTime.UtcNow.AddMilliseconds(250);
 
                 if (GameManager.Instance == null || GameManager.Instance.World == null) return;
-                ApplyCurrentRewards(GameManager.Instance.World.GetPrimaryPlayer());
+                EntityPlayerLocal localPlayer =
+                    GameManager.Instance.World.GetPrimaryPlayer() as EntityPlayerLocal;
+                MasteryState.SyncNativeActiveTitle(localPlayer);
+                ApplyCurrentRewards(localPlayer);
             }
             catch (Exception ex)
             {
@@ -927,8 +1057,16 @@ namespace BSGBestiary
                 {
                     ChronicleTitleInfo info = selected[i];
                     if (info == null || string.IsNullOrEmpty(info.RewardBuff)) continue;
-                    if (!player.Buffs.HasBuff(info.RewardBuff))
-                        BuffMethodCompatibility.Invoke(player.Buffs, "AddBuff", info.RewardBuff);
+                    if (player.Buffs.HasBuff(info.RewardBuff)) continue;
+                    bool invoked = BuffMethodCompatibility.Invoke(player.Buffs, "AddBuff", info.RewardBuff);
+                    bool present = player.Buffs.HasBuff(info.RewardBuff);
+                    if (!present && DateTime.UtcNow >= NextErrorLogUtc)
+                    {
+                        NextErrorLogUtc = DateTime.UtcNow.AddSeconds(30);
+                        Log.Error("[BSG Bestiario] DIAG: buff no activo despues de AddBuff " +
+                            info.RewardBuff + " | invocado=" + invoked +
+                            " | jugador=" + player.EntityName);
+                    }
                 }
 
                 List<string> sigParts = new List<string>();
@@ -1205,7 +1343,7 @@ namespace BSGBestiary
 
     public static class PlayerTitlesBridge
     {
-        public static void OnNotify(MethodBase original, object instance, object[] args)
+        public static bool OnNotify(MethodBase original, object instance, object[] args)
         {
             try
             {
@@ -1214,7 +1352,7 @@ namespace BSGBestiary
                 {
                     Log.Out("[BSG Chronicle] PlayerTitles.NotifyPlayer detectado pero no pude extraer el titulo. " +
                             DescribeArgs(original, args));
-                    return;
+                    return false;
                 }
 
                 EntityPlayerLocal localPlayer = ExtractLocalPlayer(args);
@@ -1231,10 +1369,12 @@ namespace BSGBestiary
                 MasteryState.Unlock(playerName, title);
                 BestiaryRewardBuff.ApplyForUnlock(localPlayer, title);
                 ChronicleState.Publish(localPlayer, playerName, title);
+                return true;
             }
             catch (Exception ex)
             {
                 Log.Error("[BSG Chronicle] Error procesando NotifyPlayer de PlayerTitles: " + ex);
+                return false;
             }
         }
 
@@ -1570,8 +1710,13 @@ namespace BSGBestiary
             // NotifyPlayer es la ruta que PlayerTitles usa para mostrar su banner inferior.
             // El desbloqueo/estado ya fue decidido antes de llegar aquí. Copiamos los datos
             // a nuestra Crónica y evitamos el banner duplicado (incluido el texto francés).
-            PlayerTitlesBridge.OnNotify(__originalMethod, __instance, __args);
-            Log.Out("[BSG Chronicle] Aviso nativo de PlayerTitles suprimido; se usa CRONICA.");
+            bool processed = PlayerTitlesBridge.OnNotify(__originalMethod, __instance, __args);
+            if (!processed)
+            {
+                Log.Out("[BSG Chronicle] Aviso nativo conservado: no se pudo registrar el titulo en CRONICA.");
+                return true;
+            }
+            Log.Out("[BSG Chronicle] Aviso nativo reemplazado por CRONICA.");
             return false;
         }
     }
