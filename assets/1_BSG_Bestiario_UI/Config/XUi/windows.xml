@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configs>
-  <!-- BSG v0.29 - vanilla/Rebirth 2.6:
+  <!-- DLG v0.36 - Vanilla/Rebirth 2.6:
        El boton v0.28 pos=-76 quedaba fuera del CharacterFrameWindow,
        visible con tooltip pero fuera del area que entrega clicks.
        ptTitlesPanel ocupa la zona Y=-46 y profundidad 20.
@@ -14,8 +14,15 @@
               sprite="menu_empty2px" defaultcolor="20,20,20,230"
               hoversprite="menu_empty2px" hovercolor="255,150,20,255"
               type="sliced" hoverscale="1.0"
-              caption="B" font_size="20" tooltip="Bestiario"
+              caption="B" font_size="20" tooltip="DLG - Bestiario"
               sound="[paging_click]" />
     </rect>
   </append>
+
+  <!-- DLG: unificar panel de Titulos con paleta oscura/roja del Bestiario.
+       El panel de Titulos ya fue agregado por el mod principal, cargado antes. -->
+  <set xpath="/windows/window[@name='CharacterFrameWindow']/rect[@name='ptTitlesPanel']/sprite[@name='ptBg']/@color">12,12,15,255</set>
+  <set xpath="/windows/window[@name='CharacterFrameWindow']/rect[@name='ptTitlesPanel']/sprite[@name='ptHeaderBg']/@color">48,21,25,255</set>
+  <set xpath="/windows/window[@name='CharacterFrameWindow']/rect[@name='ptTitlesPanel']/label[@name='ptHeaderTitle']/@color">229,91,80,255</set>
+  <set xpath="/windows/window[@name='CharacterFrameWindow']/rect[@name='ptTitlesPanel']/label[@name='ptActiveLabel']/@color">245,232,214,255</set>
 </configs>
