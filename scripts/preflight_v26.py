@@ -179,6 +179,37 @@ def verify_source():
          'return true;' in chronicle)
     test("AddBuff activation status logged",
          'buff no activo despues de AddBuff' in chronicle)
+    mmo = ROOT / "src/BsgMMOBestiaryWindow.cs"
+    hover = ROOT / "src/PlayerTitlesTooltipBridge.cs"
+    test("new MMO bestiary window source exists", mmo.is_file())
+    test("title hover bridge source exists", hover.is_file())
+    if mmo.is_file():
+        ui = mmo.read_text(encoding="utf-8")
+        test("MMO overlay autohides when character panel is closed",
+             "CharacterScreenVisible()" in ui and
+             "Auto-cierre: ventana de Personaje cerrada." in ui and
+             "opened = false;" in ui)
+        test("MMO UI does not show XML class IDs or old debug labels",
+             "creature.ClassName" not in ui and
+             "Clase objetivo" not in ui and
+             "v0.23" not in ui and
+             "v0.21" not in ui)
+        test("MMO UI includes images, collection and mastery cards",
+             'GetPortrait(family.Id)' in ui and
+             'CRIATURAS DESCUBIERTAS' in ui and
+             'RECOMPENSAS Y TÍTULOS' in ui)
+        test("MMO UI keeps Radiated vs Tainted separate",
+             '"bsg_radiated"' in ui and '"bsg_tainted"' in ui)
+    if hover.is_file():
+        source = hover.read_text(encoding="utf-8")
+        test("hover bridge displays requirements and bonus",
+             "ChronicleCatalog.BuildTooltip" in source and
+             "row.ViewComponent.ToolTip = tooltip;" in source and
+             "ptRow" in source)
+    test("MMO and hover bridge connected through original B button",
+         "BsgMMOBestiaryWindow.Toggle();" in expansion and
+         "PlayerTitlesTooltipBridge.Tick();" in chronicle and
+         "boundSimple.OnPressed += HandlePress;" in chronicle)
     test("no direct unsupported RemoveBuff calls",
          ".Buffs.RemoveBuff(" not in chronicle)
 

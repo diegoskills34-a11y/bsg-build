@@ -55,7 +55,7 @@ jobs:
         shell: powershell
         run: .\build.ps1
 
-      - name: Package BSG v0.34 persistent Chronicle and active-title rewards
+      - name: Package BSG v0.35 MMO bestiary and title tooltips
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "package/0_BSG_Bestiario" | Out-Null
@@ -64,8 +64,18 @@ jobs:
           Copy-Item "assets/BSG_Masteries_Config/buffs.xml" "package/0_BSG_Bestiario/Config/buffs.xml" -Force
           Copy-Item "assets/zzzzzzzz_BSG_Masteries_Tags" -Destination "package/zzzzzzzz_BSG_Masteries_Tags" -Recurse -Force
           Copy-Item "assets/1_BSG_Bestiario_UI" -Destination "package/1_BSG_Bestiario_UI" -Recurse -Force
+          # Los retratos PNG son opcionales y se cargan desde UI/Portraits.
+          # Un paquete sin assets conserva iconos generados por la DLL.
+          if (Test-Path "assets/BSG_Portraits") {
+            Copy-Item "assets/BSG_Portraits" -Destination "package/0_BSG_Bestiario/UI/Portraits" -Recurse -Force
+          }
           @(
-            "BSG v0.34: guarda las 4 entradas de Cronica en bsg_chronicle_history.xml y las recupera al entrar.",
+            "BSG v0.35: bestiario estilo MMO, familias con retratos, variantes descubiertas y maestrias visibles.",
+            "Al cerrar Personaje, el Bestiario tambien se cierra; no requiere el boton Cerrar.",
+            "Se ocultan los identificadores tecnicos de clases C# y XML.",
+            "Requisitos y recompensas en el tooltip de cada titulo, incluso bloqueado.",
+            "Retratos de familia: opcionales, se ubican en 0_BSG_Bestiario/UI/Portraits/*.png.",
+            "Conserva Crónica persistente y maestrias de v0.34.",
             "Sincroniza el titulo equipado que ya estaba desbloqueado con el sistema de maestrias BSG.",
             "Registra en output_log si AddBuff invoca el metodo pero el buff no se activa.",
             "No reanuncia como nuevo un titulo historico recuperado; conserva todos los thresholds y 68 titulos.",
@@ -76,19 +86,19 @@ jobs:
             "IMPORTANTE: conservar las 3 carpetas BSG, incluida zzzzzzzz_BSG_Masteries_Tags que carga tras Rebirth.",
             "La actualizacion NO incluye PlayerTitles.dll. Para uso standalone mantener el paquete completo anterior.",
             "PENDIENTE: comprobar el dano real en juego y la ruta del chat. La compilacion no valida mecanicas de combate."
-          ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.34.txt" -Encoding UTF8
-          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI","package/zzzzzzzz_BSG_Masteries_Tags" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.34_CRONICA_Y_RECOMPENSAS.zip" -Force
+          ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.35.txt" -Encoding UTF8
+          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI","package/zzzzzzzz_BSG_Masteries_Tags" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.35_BESTIARIO_MMO.zip" -Force
 
       - name: Verify packaged ZIP against Vanilla v2.6
         shell: powershell
-        run: python scripts/preflight_v26.py --package out/BSG_Bestiario_Rebirth26_v0.34_CRONICA_Y_RECOMPENSAS.zip
+        run: python scripts/preflight_v26.py --package out/BSG_Bestiario_Rebirth26_v0.35_BESTIARIO_MMO.zip
 
       - name: Upload BSG update ZIP
         id: upload_package
         uses: actions/upload-artifact@v4
         with:
-          name: BSG_Bestiario_Rebirth26_v0.34_CRONICA_Y_RECOMPENSAS
-          path: out/BSG_Bestiario_Rebirth26_v0.34_CRONICA_Y_RECOMPENSAS.zip
+          name: BSG_Bestiario_Rebirth26_v0.35_BESTIARIO_MMO
+          path: out/BSG_Bestiario_Rebirth26_v0.35_BESTIARIO_MMO.zip
           if-no-files-found: error
 
       - name: Publish build pointer
@@ -100,7 +110,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "build-output" | Out-Null
           [pscustomobject]@{
-            version = "0.34"
+            version = "0.35"
             workflow_run_id = [long]$env:BSG_RUN_ID
             artifact_id = [long]$env:BSG_ARTIFACT_ID
             commit = $env:BSG_SOURCE_SHA
@@ -109,6 +119,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add build-output/latest-artifact.json
-          git commit -m "ci: record compiled v0.34 package [skip ci]"
+          git commit -m "ci: record compiled v0.35 package [skip ci]"
           git push origin HEAD:main
 
