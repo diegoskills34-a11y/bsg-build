@@ -25,10 +25,10 @@ namespace BSGBestiary
                 ModEvents.EntityKilled.RegisterHandler(BestiaryTracker.OnKilled);
                 ModEvents.PlayerSpawnedInWorld.RegisterHandler(OnPlayerSpawnedInWorld);
 
-                var harmony = new Harmony("bsg.chronicle.rebirth26.v034chroniclefix");
+                var harmony = new Harmony("bsg.chronicle.rebirth26.v035bestiaryui");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-                Log.Out("[BSG Chronicle] v0.34: historial persistente de Cronica y recuperacion de maestrias del titulo activo.");
+                Log.Out("[BSG Chronicle] v0.35: interfaz de bestiario MMO, cierre automatico y tooltips de titulos.");
             }
             catch (Exception ex)
             {
@@ -42,6 +42,7 @@ namespace BSGBestiary
             BestiaryRewardBuff.EnsureLocalPlayerReward();
             BestiaryTracker.Tick();
             BestiaryButtonBridge.Tick();
+            PlayerTitlesTooltipBridge.Tick();
         }
 
         private static void OnPlayerSpawnedInWorld(ref ModEvents.SPlayerSpawnedInWorldData data)
