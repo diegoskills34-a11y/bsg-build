@@ -26,6 +26,12 @@ namespace BSGBestiary
         private Texture2D backdrop;
         private Texture2D accent;
         private Texture2D dark;
+        private Texture2D frame;
+        private Texture2D topbar;
+        private Texture2D rowNormal;
+        private Texture2D rowHover;
+        private Texture2D rowSelected;
+        private Texture2D cardTexture;
         private bool stylesReady;
         private bool loggedClose;
 
@@ -162,11 +168,19 @@ namespace BSGBestiary
         private void EnsureStyles()
         {
             if (stylesReady) return;
-            backdrop = Solid(new Color(0.045f, 0.058f, 0.071f, 0.985f));
-            dark = Solid(new Color(0.09f, 0.105f, 0.125f, 0.98f));
-            accent = Solid(new Color(0.65f, 0.17f, 0.14f, 1f));
-            Style("title", 27, new Color(0.98f, 0.90f, 0.76f), true);
-            Style("family", 23, new Color(0.98f, 0.90f, 0.76f), true);
+            // Paleta DLG: gris grafito metalico + rojo oscuro + oro de recompensas.
+            // Intencionalmente alineada con ventanas XUi de Vanilla/Rebirth.
+            backdrop = Solid(new Color(0.045f, 0.044f, 0.049f, 0.995f));
+            dark = Solid(new Color(0.077f, 0.075f, 0.080f, 0.995f));
+            frame = Solid(new Color(0.175f, 0.16f, 0.17f, 1f));
+            topbar = Solid(new Color(0.12f, 0.078f, 0.080f, 1f));
+            rowNormal = Solid(new Color(0.10f, 0.10f, 0.115f, 1f));
+            rowHover = Solid(new Color(0.28f, 0.12f, 0.135f, 1f));
+            rowSelected = Solid(new Color(0.41f, 0.095f, 0.115f, 1f));
+            cardTexture = Solid(new Color(0.064f, 0.063f, 0.069f, 0.99f));
+            accent = Solid(new Color(0.70f, 0.145f, 0.155f, 1f));
+            Style("title", 27, new Color(0.97f, 0.94f, 0.90f), true);
+            Style("family", 23, new Color(0.94f, 0.92f, 0.90f), true);
             Style("heading", 17, Color.white, true);
             Style("body", 14, new Color(0.88f, 0.90f, 0.91f));
             Style("muted", 12, new Color(0.68f, 0.73f, 0.78f));
@@ -179,10 +193,30 @@ namespace BSGBestiary
             button.alignment = TextAnchor.MiddleLeft;
             button.wordWrap = false;
             button.padding = new RectOffset(8, 4, 4, 4);
+            button.normal.background = rowNormal;
+            button.hover.background = rowHover;
+            button.active.background = rowSelected;
+            button.focused.background = rowHover;
+            button.normal.textColor = Color.white;
+            button.hover.textColor = Color.white;
+            button.active.textColor = Color.white;
             styles["button"] = button;
+            GUIStyle selected = new GUIStyle(button);
+            selected.normal.background = rowSelected;
+            selected.normal.textColor = new Color(1f, 0.87f, 0.73f);
+            styles["selectedButton"] = selected;
+            GUIStyle card = new GUIStyle(GUI.skin.box);
+            card.normal.background = cardTexture;
+            card.normal.textColor = Color.white;
+            card.padding = new RectOffset(6, 6, 6, 6);
+            styles["card"] = card;
             GUIStyle close = new GUIStyle(GUI.skin.button);
             close.fontSize = 13;
             close.alignment = TextAnchor.MiddleCenter;
+            close.normal.background = rowNormal;
+            close.hover.background = rowSelected;
+            close.normal.textColor = Color.white;
+            close.hover.textColor = Color.white;
             styles["close"] = close;
             stylesReady = true;
         }
@@ -260,7 +294,9 @@ namespace BSGBestiary
                     (Screen.height - height) * 0.5f, width, height);
                 Color oldColor = GUI.color;
                 GUI.color = Color.white;
-                GUI.DrawTexture(bounds, backdrop);
+                GUI.DrawTexture(bounds, frame);
+                GUI.DrawTexture(new Rect(bounds.x + 2f, bounds.y + 2f,
+                    bounds.width - 4f, bounds.height - 4f), backdrop);
                 GUI.Window(WindowId, bounds, Render, "", GUIStyle.none);
                 GUI.color = oldColor;
             }
@@ -289,10 +325,13 @@ namespace BSGBestiary
         {
             List<BestiaryFamilyDefinition> families = BestiaryFamilyDefinition.Read();
             if (selected < 0 || selected >= families.Count) selected = 0;
-            GUI.DrawTexture(new Rect(0, 0, bounds.width, 4), accent);
+            GUI.DrawTexture(new Rect(2, 2, bounds.width - 4, 61), topbar);
+            GUI.DrawTexture(new Rect(2, 0, bounds.width - 4, 4), accent);
+            GUI.DrawTexture(new Rect(2, 62, bounds.width - 4, 2), accent);
+            GUI.DrawTexture(new Rect(12, 83, bounds.width - 24, bounds.height - 95), dark);
             GUILayout.BeginArea(new Rect(20, 16, bounds.width - 40, 54));
             GUILayout.BeginHorizontal();
-            GUILayout.Label("BSG  /  BESTIARIO", S("title"), GUILayout.ExpandWidth(true));
+            GUILayout.Label("DLG  /  BESTIARIO", S("title"), GUILayout.ExpandWidth(true));
             if (GUILayout.Button("CERRAR  X", S("close"), GUILayout.Width(116),
                 GUILayout.Height(34))) Close();
             GUILayout.EndHorizontal();
@@ -306,7 +345,9 @@ namespace BSGBestiary
             Rect middle = new Rect(32 + leftWidth, 88, centerWidth, contentHeight);
             Rect right = new Rect(bounds.width - rightWidth - 20, 88,
                 rightWidth, contentHeight);
-            GUI.DrawTexture(new Rect(right.x - 8f, 86, 1f, contentHeight), accent);
+            GUI.DrawTexture(new Rect(right.x - 10f, 86, 2f, contentHeight), accent);
+            GUI.DrawTexture(new Rect(middle.x - 9f, 86, 1f, contentHeight),
+                frame);
 
             string player = PlayerName();
             GUILayout.BeginArea(left);
@@ -318,12 +359,13 @@ namespace BSGBestiary
             {
                 BestiaryFamilyDefinition family = families[i];
                 BestiaryFamilyCount data = BestiaryTracker.Snapshot(player, family.Id);
-                GUILayout.BeginHorizontal(GUI.skin.box, GUILayout.Height(56f));
+                GUILayout.BeginHorizontal(S("card"), GUILayout.Height(56f));
                 Texture2D portrait = GetPortrait(family.Id);
-                GUILayout.Label(portrait, GUILayout.Width(45f), GUILayout.Height(45f));
+                Portrait(portrait, 45f);
                 string name = Label(family);
                 if (GUILayout.Button((i == selected ? "▸ " : "") + name +
-                    "\n" + data.Kills + " bajas", S("button"), GUILayout.Height(47f),
+                    "\n" + data.Kills + " bajas",
+                    S(i == selected ? "selectedButton" : "button"), GUILayout.Height(47f),
                     GUILayout.ExpandWidth(true)))
                 {
                     selected = i;
@@ -355,8 +397,8 @@ namespace BSGBestiary
         {
             BestiaryFamilyCount data = BestiaryTracker.Snapshot(player, family.Id);
             GUILayout.Label(Label(family).ToUpperInvariant(), S("family"));
-            GUILayout.BeginHorizontal(GUI.skin.box, GUILayout.Height(145f));
-            GUILayout.Label(GetPortrait(family.Id), GUILayout.Width(128f), GUILayout.Height(128f));
+            GUILayout.BeginHorizontal(S("card"), GUILayout.Height(145f));
+            Portrait(GetPortrait(family.Id), 128f);
             GUILayout.BeginVertical();
             GUILayout.Label(Description(family), S("body"));
             GUILayout.Space(5f);
@@ -378,7 +420,7 @@ namespace BSGBestiary
             });
             if (species.Count == 0)
             {
-                GUILayout.BeginVertical(GUI.skin.box, GUILayout.Height(125f));
+                GUILayout.BeginVertical(S("card"), GUILayout.Height(125f));
                 GUILayout.Space(10f);
                 GUILayout.Label("AÚN SIN DESCUBRIMIENTOS", S("heading"));
                 GUILayout.Label("Eliminá una criatura de esta familia para agregarla al registro.", S("body"));
@@ -386,8 +428,8 @@ namespace BSGBestiary
             }
             foreach (BestiarySpeciesCount creature in species)
             {
-                GUILayout.BeginHorizontal(GUI.skin.box, GUILayout.Height(68f));
-                GUILayout.Label(GetPortrait(family.Id), GUILayout.Width(58f), GUILayout.Height(58f));
+                GUILayout.BeginHorizontal(S("card"), GUILayout.Height(68f));
+                Portrait(GetPortrait(family.Id), 58f);
                 GUILayout.BeginVertical();
                 string name = string.IsNullOrEmpty(creature.DisplayName)
                     ? "Criatura desconocida" : creature.DisplayName;
@@ -432,8 +474,8 @@ namespace BSGBestiary
                 bool prestige = i >= 3;
                 string level = prestige ? "PRESTIGIO " + (i - 2) :
                     "MAESTRÍA " + (i + 1);
-                GUILayout.BeginVertical(GUI.skin.box);
-                GUILayout.Label((unlocked ? "✓ " : "🔒 ") + level +
+                GUILayout.BeginVertical(S("card"));
+                GUILayout.Label((unlocked ? "✓ " : "◻ ") + level +
                     " · " + tier.Text, unlocked ? S("unlocked") : S("locked"));
                 GUILayout.Label("Requisito: " + tier.Threshold + " bajas", S("muted"));
                 string bonus;
@@ -452,6 +494,15 @@ namespace BSGBestiary
             GUILayout.Label("Las bonificaciones de familias diferentes no se suman contra un mismo enemigo: se aplica la más alta.", S("muted"));
         }
 
+        private void Portrait(Texture2D image, float size)
+        {
+            // ScaleToFit mantiene el retrato completo sin cortar el sujeto.
+            Rect area = GUILayoutUtility.GetRect(size, size, GUILayout.Width(size),
+                GUILayout.Height(size), GUILayout.ExpandWidth(false));
+            if (image == null) return;
+            GUI.DrawTexture(area, image, ScaleMode.ScaleToFit, true);
+        }
+
         private void OnDestroy()
         {
             if (instance == this) instance = null;
@@ -461,6 +512,9 @@ namespace BSGBestiary
             if (backdrop != null) UnityEngine.Object.Destroy(backdrop);
             if (dark != null) UnityEngine.Object.Destroy(dark);
             if (accent != null) UnityEngine.Object.Destroy(accent);
+            foreach (Texture2D tex in new[] { frame, topbar, rowNormal,
+                rowHover, rowSelected, cardTexture })
+                if (tex != null) UnityEngine.Object.Destroy(tex);
         }
     }
 }
