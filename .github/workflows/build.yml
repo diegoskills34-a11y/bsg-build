@@ -55,7 +55,7 @@ jobs:
         shell: powershell
         run: .\build.ps1
 
-      - name: Package BSG v0.33 mastery buffs with exact target signatures
+      - name: Package BSG v0.34 persistent Chronicle and active-title rewards
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path "package/0_BSG_Bestiario" | Out-Null
@@ -65,26 +65,30 @@ jobs:
           Copy-Item "assets/zzzzzzzz_BSG_Masteries_Tags" -Destination "package/zzzzzzzz_BSG_Masteries_Tags" -Recurse -Force
           Copy-Item "assets/1_BSG_Bestiario_UI" -Destination "package/1_BSG_Bestiario_UI" -Recurse -Force
           @(
-            "BSG v0.33: 16 familias, 3 maestrias + prestigio. +10/+20/+25% daño; +0/+5/+10 puntos desmembramiento.",
+            "BSG v0.34: guarda las 4 entradas de Cronica en bsg_chronicle_history.xml y las recupera al entrar.",
+            "Sincroniza el titulo equipado que ya estaba desbloqueado con el sistema de maestrias BSG.",
+            "Registra en output_log si AddBuff invoca el metodo pero el buff no se activa.",
+            "No reanuncia como nuevo un titulo historico recuperado; conserva todos los thresholds y 68 titulos.",
+            "Se conserva la configuracion de 16 familias: 10/20/25 dano, 0/5/10 puntos desmembramiento.",
             "Los buffs se vinculan automaticamente a los titulos al cargar el XML, conservando los thresholds y textos.",
             "Backup automatico: playertitles.xml.bsg_before_masteries_v033.bak",
             "Radiados no incluye Tainted. Ante familias superpuestas solo gana el porcentaje mayor.",
             "IMPORTANTE: conservar las 3 carpetas BSG, incluida zzzzzzzz_BSG_Masteries_Tags que carga tras Rebirth.",
             "La actualizacion NO incluye PlayerTitles.dll. Para uso standalone mantener el paquete completo anterior.",
-            "PENDIENTE: comprobar efectos de daño y desmembramiento dentro de la partida; CI no lo prueba."
-          ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.33.txt" -Encoding UTF8
-          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI","package/zzzzzzzz_BSG_Masteries_Tags" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.33_MAESTRIAS_MAX_EXCLUSIVAS.zip" -Force
+            "PENDIENTE: comprobar el dano real en juego y la ruta del chat. La compilacion no valida mecanicas de combate."
+          ) | Set-Content "package/0_BSG_Bestiario/BSG_LEEME_v0.34.txt" -Encoding UTF8
+          Compress-Archive -Path "package/0_BSG_Bestiario","package/1_BSG_Bestiario_UI","package/zzzzzzzz_BSG_Masteries_Tags" -DestinationPath "out/BSG_Bestiario_Rebirth26_v0.34_CRONICA_Y_RECOMPENSAS.zip" -Force
 
       - name: Verify packaged ZIP against Vanilla v2.6
         shell: powershell
-        run: python scripts/preflight_v26.py --package out/BSG_Bestiario_Rebirth26_v0.33_MAESTRIAS_MAX_EXCLUSIVAS.zip
+        run: python scripts/preflight_v26.py --package out/BSG_Bestiario_Rebirth26_v0.34_CRONICA_Y_RECOMPENSAS.zip
 
       - name: Upload BSG update ZIP
         id: upload_package
         uses: actions/upload-artifact@v4
         with:
-          name: BSG_Bestiario_Rebirth26_v0.33_MAESTRIAS_MAX_EXCLUSIVAS
-          path: out/BSG_Bestiario_Rebirth26_v0.33_MAESTRIAS_MAX_EXCLUSIVAS.zip
+          name: BSG_Bestiario_Rebirth26_v0.34_CRONICA_Y_RECOMPENSAS
+          path: out/BSG_Bestiario_Rebirth26_v0.34_CRONICA_Y_RECOMPENSAS.zip
           if-no-files-found: error
 
       - name: Publish build pointer
@@ -96,7 +100,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path "build-output" | Out-Null
           [pscustomobject]@{
-            version = "0.33"
+            version = "0.34"
             workflow_run_id = [long]$env:BSG_RUN_ID
             artifact_id = [long]$env:BSG_ARTIFACT_ID
             commit = $env:BSG_SOURCE_SHA
@@ -105,6 +109,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add build-output/latest-artifact.json
-          git commit -m "ci: record compiled v0.33 package [skip ci]"
+          git commit -m "ci: record compiled v0.34 package [skip ci]"
           git push origin HEAD:main
 

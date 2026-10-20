@@ -162,6 +162,23 @@ def verify_source():
                  for g in b.findall(".//effect_group")))
         test("overlap exclusivity uses NotHasBuff",
              len(b.findall(".//requirement[@name='NotHasBuff']")) >= 30)
+    test("Chronicle retains 4 unlock records per world",
+         'bsg_chronicle_history.xml' in chronicle and
+         'private static void EnsureHistoryLoaded()' in chronicle and
+         'SaveHistory();' in chronicle and
+         'MaxHistory = 4' in chronicle)
+    test("Chronicle historical title recovery is labeled as old",
+         'BackfillFromPriorUnlocks' in chronicle and
+         'RememberRecoveredTitle' in chronicle and
+         'ya había desbloqueado' in chronicle)
+    test("active native PlayerTitles reward sync",
+         'SyncNativeActiveTitle' in chronicle and
+         'GetChildById("ptActiveLabel")' in chronicle)
+    test("native title notification preserved if Chronicle cannot handle it",
+         'bool processed = PlayerTitlesBridge.OnNotify' in chronicle and
+         'return true;' in chronicle)
+    test("AddBuff activation status logged",
+         'buff no activo despues de AddBuff' in chronicle)
     test("no direct unsupported RemoveBuff calls",
          ".Buffs.RemoveBuff(" not in chronicle)
 
