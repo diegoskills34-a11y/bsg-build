@@ -570,7 +570,47 @@ namespace BSGBestiary
             {
                 LocalPlayer = player;
                 EnsureHistoryLoaded();
+                BackfillFromPriorUnlocks(player.EntityName);
             }
+        }
+
+        private static void BackfillFromPriorUnlocks(string playerName)
+        {
+            if (Entries.Count != 0 || string.IsNullOrEmpty(playerName)) return;
+            List<string> unlocked = MasteryState.GetRecordedTitles(playerName);
+            if (unlocked.Count == 0) return;
+            for (int i = unlocked.Count - 1; i >= 0 && Entries.Count < MaxHistory; i--)
+            {
+                string title = unlocked[i];
+                if (ChronicleCatalog.Find(title) == null) continue;
+                Entries.Add(new ChronicleEntry {
+                    Line = playerName + " ya había desbloqueado " + title,
+                    Tooltip = ChronicleCatalog.BuildTooltip(title),
+                    CreatedUtc = DateTime.UtcNow.AddHours(-1)
+                });
+            }
+            if (Entries.Count == 0) return;
+            SaveHistory();
+            Log.Out("[BSG Chronicle] v0.34: " + Entries.Count +
+                " títulos históricos recuperados de BSG; fechas originales no disponibles.");
+        }
+
+        public static void RememberRecoveredTitle(string playerName, string title)
+        {
+            if (string.IsNullOrEmpty(title) || string.IsNullOrEmpty(playerName)) return;
+            EnsureHistoryLoaded();
+            foreach (ChronicleEntry existing in Entries)
+                if (existing.Line.IndexOf(title, StringComparison.OrdinalIgnoreCase) >= 0 &&
+                    existing.Line.StartsWith(playerName, StringComparison.OrdinalIgnoreCase))
+                    return;
+            Entries.Insert(0, new ChronicleEntry {
+                Line = playerName + " ya había desbloqueado " + title,
+                Tooltip = ChronicleCatalog.BuildTooltip(title),
+                CreatedUtc = DateTime.UtcNow.AddHours(-1)
+            });
+            while (Entries.Count > MaxHistory) Entries.RemoveAt(Entries.Count - 1);
+            SaveHistory();
+            Log.Out("[BSG Chronicle] Título anterior agregado al historial: " + title);
         }
 
         public static void Publish(EntityPlayerLocal localPlayer, string playerName, string title)
@@ -794,6 +834,7 @@ namespace BSGBestiary
                 if (active == null || string.IsNullOrEmpty(active.Text)) return;
                 if (HasTitle(player.EntityName, active.Text)) return;
                 Unlock(player.EntityName, active.Text);
+                ChronicleState.RememberRecoveredTitle(player.EntityName, active.Text);
                 Log.Out("[BSG Bestiario] SINCRONIZACION: titulo activo confirmado en PlayerTitles => " +
                     active.Text + ". Recompensa restablecida sin anuncio nuevo.");
             }
@@ -944,6 +985,18 @@ namespace BSGBestiary
                 result.Add(info);
 
             return result;
+        }
+
+        public static List<string> GetRecordedTitles(string playerName)
+        {
+            EnsureLoaded();
+            HashSet<string> unlocked;
+            if (string.IsNullOrEmpty(playerName) ||
+                !Unlocked.TryGetValue(playerName, out unlocked))
+                return new List<string>();
+            List<string> titles = new List<string>(unlocked);
+            titles.Sort(StringComparer.OrdinalIgnoreCase);
+            return titles;
         }
 
         public static bool HasTitle(string playerName, string title)
